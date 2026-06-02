@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>¡Listo! · Banco Aurora</title>
+<link rel="stylesheet" href="assets/styles.css" />
+<style>
+  .ok-app {
+    background: var(--surface-2);
+    min-height: 100vh;
+  }
+
+  .ok-header {
+    text-align: center;
+    padding: 0 24px 12px;
+  }
+  .ok-header h2 {
+    font-family: var(--font-display);
+    font-size: 22px;
+    font-weight: 600;
+    margin: 0 0 6px;
+    letter-spacing: -0.02em;
+    color: var(--brand-deep);
+  }
+  .ok-header .sub {
+    font-size: 14px;
+    color: var(--muted);
+    max-width: 280px;
+    margin: 0 auto;
+  }
+
+  .receipt {
+    margin: 22px 20px 0;
+    background: var(--surface);
+    border-radius: var(--r-lg);
+    border: 1px solid var(--border);
+    overflow: hidden;
+    position: relative;
+  }
+  .receipt::before, .receipt::after {
+    content: '';
+    position: absolute;
+    width: 16px; height: 16px;
+    background: var(--surface-2);
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    z-index: 1;
+  }
+  .receipt::before { left: -10px; top: 50%; transform: translateY(-50%); }
+  .receipt::after  { right: -10px; top: 50%; transform: translateY(-50%); }
+
+  .receipt-head {
+    background: linear-gradient(135deg, var(--brand-core) 0%, var(--brand-deep) 100%);
+    color: #fff;
+    padding: 18px 20px 16px;
+    text-align: center;
+  }
+  .receipt-head .label {
+    font-size: 11px;
+    opacity: 0.75;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 4px;
+  }
+  .receipt-head .amount {
+    font-family: var(--font-mono);
+    font-size: 30px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    line-height: 1.1;
+  }
+  .receipt-head .amount .currency { font-size: 16px; opacity: 0.78; margin-right: 4px; font-weight: 500; }
+  .receipt-head .amount .cents { font-size: 18px; opacity: 0.74; }
+
+  .receipt-divider {
+    position: relative;
+    height: 0;
+    border-top: 1.5px dashed var(--border);
+    margin: 0 14px;
+  }
+
+  .receipt-body { padding: 16px 20px 20px; }
+  .receipt-body .detail-row + .detail-row { border-top: 1px dashed var(--border); }
+
+  .ref-foot {
+    text-align: center;
+    background: var(--surface-2);
+    padding: 12px 20px;
+    border-top: 1px solid var(--border);
+  }
+  .ref-foot .l {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    margin-bottom: 2px;
+  }
+  .ref-foot .ref {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--brand-deep);
+    letter-spacing: 0.04em;
+  }
+
+  .actions {
+    padding: 20px 20px 16px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 8px;
+  }
+  .actions a {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--r-md);
+    padding: 12px 6px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 11px;
+    color: var(--fg-soft);
+    font-weight: 500;
+    display: flex; flex-direction: column; align-items: center; gap: 4px;
+    cursor: pointer;
+  }
+  .actions a svg { width: 18px; height: 18px; color: var(--brand-medium); }
+</style>
+</head>
+<body>
+<div class="app ok-app">
+  <header class="appbar" data-od-id="ok-appbar">
+    <span class="back-btn" style="visibility: hidden;" aria-hidden="true"></span>
+    <h1>Comprobante</h1>
+    <span class="spacer"></span>
+    <a href="03-dashboard.html" class="icon-btn" aria-label="Cerrar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M6 18L18 6"/></svg>
+    </a>
+  </header>
+
+  <main>
+    <div class="success-mark" data-od-id="success-mark" aria-hidden="true">
+      <svg viewBox="0 0 24 24"><polyline points="5 12 10 17 19 7"/></svg>
+    </div>
+
+    <div class="ok-header">
+      <h2>¡Transferencia enviada!</h2>
+      <p class="sub">María Sosa recibirá el dinero en su cuenta de inmediato.</p>
+    </div>
+
+    <article class="receipt" data-od-id="receipt-card">
+      <div class="receipt-head">
+        <div class="label">Monto enviado</div>
+        <div class="amount">
+          <span class="currency">Bs.</span>1.250<span class="cents">,00</span>
+        </div>
+      </div>
+
+      <div class="receipt-divider"></div>
+
+      <div class="receipt-body">
+        <div class="detail-row">
+          <span class="l">Fecha</span>
+          <span class="r">26 may 2026 · 16:42</span>
+        </div>
+        <div class="detail-row">
+          <span class="l">De</span>
+          <span class="r">Cuenta corriente <span class="mono" style="color: var(--muted); font-size: 12px;">•••• 4421</span></span>
+        </div>
+        <div class="detail-row">
+          <span class="l">Para</span>
+          <span class="r">María Sosa Hernández</span>
+        </div>
+        <div class="detail-row">
+          <span class="l">Cuenta destino</span>
+          <span class="r mono">0108-0455-22-0100043397</span>
+        </div>
+        <div class="detail-row">
+          <span class="l">Banco</span>
+          <span class="r">Banco Aurora · 0108</span>
+        </div>
+        <div class="detail-row">
+          <span class="l">Concepto</span>
+          <span class="r">Pago de almuerzo del jueves</span>
+        </div>
+        <div class="detail-row">
+          <span class="l">Comisión</span>
+          <span class="r mono">Bs. 0,00</span>
+        </div>
+      </div>
+
+      <div class="ref-foot">
+        <div class="l">Referencia</div>
+        <div class="ref">TRF-20260526-845129</div>
+      </div>
+    </article>
+
+    <div class="actions" data-od-id="actions">
+      <a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v12"/><path d="m6 10 6 6 6-6"/><path d="M5 20h14"/></svg>
+        Descargar PDF
+      </a>
+      <a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4M15.4 6.5l-6.8 4"/></svg>
+        Compartir
+      </a>
+      <a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+        Guardar
+      </a>
+    </div>
+  </main>
+
+  <div class="cta-bar">
+    <a href="03-dashboard.html" class="btn primary">Volver al inicio</a>
+  </div>
+</div>
+</body>
+</html>

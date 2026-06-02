@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Inicio · Banco Aurora</title>
+<link rel="stylesheet" href="assets/styles.css" />
+<style>
+  .dash-app { background: var(--surface-2); }
+
+  .dash-header {
+    background: var(--brand-core);
+    color: #fff;
+    padding: 18px 20px 60px;
+    border-radius: 0 0 28px 28px;
+    position: relative;
+  }
+  .dash-header .top-row {
+    display: flex; align-items: center; gap: 12px;
+    margin-bottom: 22px;
+  }
+  .dash-header .greet {
+    flex: 1;
+    font-size: 13px;
+    opacity: 0.85;
+  }
+  .dash-header .greet strong {
+    display: block;
+    font-size: 17px;
+    font-weight: 600;
+    opacity: 1;
+    letter-spacing: -0.01em;
+  }
+  .dash-header .top-row .icon-btn {
+    position: relative;
+  }
+  .dash-header .top-row .icon-btn .dot {
+    position: absolute;
+    top: 6px; right: 6px;
+    width: 8px; height: 8px;
+    background: var(--brand-accent);
+    border-radius: 999px;
+    border: 2px solid var(--brand-core);
+  }
+
+  .dash-balance {
+    margin: -42px 20px 0;
+    background: linear-gradient(135deg, var(--brand-deep) 0%, var(--brand-core) 100%);
+    color: #fff;
+    border-radius: var(--r-xl);
+    padding: 20px 22px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 8px 24px -10px rgba(4,50,99,0.35);
+  }
+  .dash-balance::after {
+    content: '';
+    position: absolute;
+    right: -50px; top: -50px;
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(45,204,205,0.20) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .dash-balance .label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    opacity: 0.7;
+    display: flex; align-items: center; gap: 6px;
+    margin-bottom: 6px;
+  }
+  .dash-balance .label .eye {
+    cursor: pointer; opacity: 0.6;
+    width: 16px; height: 16px;
+  }
+  .dash-balance .amount {
+    font-family: var(--font-mono);
+    font-size: 34px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    margin: 0;
+    line-height: 1.1;
+  }
+  .dash-balance .amount .currency { font-size: 18px; opacity: 0.8; margin-right: 5px; font-weight: 500; }
+  .dash-balance .amount .cents { font-size: 22px; opacity: 0.78; }
+  .dash-balance .acct {
+    display: flex; justify-content: space-between;
+    margin-top: 16px;
+    padding-top: 14px;
+    border-top: 1px solid rgba(255,255,255,0.18);
+    font-size: 12px;
+  }
+  .dash-balance .acct .l { opacity: 0.75; }
+  .dash-balance .acct .v { font-family: var(--font-mono); font-weight: 500; }
+
+  .dot-nav {
+    display: flex; justify-content: center; gap: 6px;
+    margin-top: 10px;
+  }
+  .dot-nav span {
+    width: 6px; height: 6px;
+    border-radius: 999px;
+    background: var(--border-strong);
+  }
+  .dot-nav span.active { background: var(--brand-core); width: 18px; border-radius: 999px; }
+
+  .quick-actions {
+    grid-template-columns: repeat(4, 1fr);
+    padding: 0 20px;
+    margin-top: 18px;
+  }
+
+  .section-title {
+    display: flex; justify-content: space-between; align-items: baseline;
+    padding: 22px 20px 8px;
+  }
+  .section-title h3 {
+    font-family: var(--font-display);
+    font-size: 15px;
+    font-weight: 600;
+    margin: 0;
+    color: var(--fg);
+  }
+  .section-title a {
+    font-size: 12px;
+    color: var(--brand-medium);
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  .txn-list-wrap {
+    background: var(--surface);
+    margin: 0 20px;
+    border-radius: var(--r-md);
+    padding: 4px 16px;
+    border: 1px solid var(--border);
+  }
+  .txn { padding: 14px 0; }
+  .pad-bottom { height: 24px; }
+</style>
+</head>
+<body>
+<div class="app dash-app">
+  <header class="dash-header" data-od-id="dashboard-header">
+    <div class="top-row">
+      <div class="avatar" style="background: rgba(255,255,255,0.15); color: #fff;">EM</div>
+      <div class="greet">
+        Buenas tardes,
+        <strong>Elías Mendoza</strong>
+      </div>
+      <button class="icon-btn" aria-label="Notificaciones">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10 21a2 2 0 0 0 4 0"/></svg>
+        <span class="dot" aria-hidden="true"></span>
+      </button>
+    </div>
+  </header>
+
+  <section class="dash-balance" data-od-id="balance-card">
+    <div class="label">
+      Saldo disponible
+      <span class="eye" aria-label="Ocultar saldo" role="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></svg>
+      </span>
+    </div>
+    <p class="amount"><span class="currency">Bs.</span>12.450<span class="cents">,30</span></p>
+    <div class="acct">
+      <div>
+        <span class="l">Cuenta corriente</span><br>
+        <span class="v">•••• 4421</span>
+      </div>
+      <div style="text-align: right;">
+        <span class="l">Disponible USD</span><br>
+        <span class="v">$ 142,18</span>
+      </div>
+    </div>
+  </section>
+
+  <div class="dot-nav" aria-hidden="true">
+    <span class="active"></span>
+    <span></span>
+    <span></span>
+  </div>
+
+  <div class="quick-actions" data-od-id="quick-actions">
+    <a class="quick-action" href="05-transferencia.html">
+      <span class="ico">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7"/><path d="M8 7h9v9"/></svg>
+      </span>
+      <span>Transferir</span>
+    </a>
+    <a class="quick-action" href="06-pago-movil.html">
+      <span class="ico">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="3" width="12" height="18" rx="2"/><path d="M11 18h2"/></svg>
+      </span>
+      <span>Pago móvil</span>
+    </a>
+    <a class="quick-action" href="08-estado-cuenta.html">
+      <span class="ico">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 14l4-4 3 3 5-5"/></svg>
+      </span>
+      <span>Movimientos</span>
+    </a>
+    <a class="quick-action" href="#">
+      <span class="ico">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+      </span>
+      <span>Pagar servicios</span>
+    </a>
+  </div>
+
+  <div class="section-title">
+    <h3>Movimientos recientes</h3>
+    <a href="08-estado-cuenta.html">Ver todos</a>
+  </div>
+
+  <div class="txn-list-wrap" data-od-id="recent-txns">
+    <div class="txn">
+      <div class="ico credit">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
+      </div>
+      <div class="txt">
+        <div class="title">Pago móvil recibido</div>
+        <div class="sub">María Sosa · Hoy 14:22</div>
+      </div>
+      <div class="amt credit">+ Bs. 1.250<span class="cents">,00</span></div>
+    </div>
+
+    <div class="txn">
+      <div class="ico debit">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7"/><path d="M8 7h9v9"/></svg>
+      </div>
+      <div class="txt">
+        <div class="title">Transferencia · Banesco</div>
+        <div class="sub">Jorge Pacheco · Hoy 11:08</div>
+      </div>
+      <div class="amt">− Bs. 420<span class="cents">,00</span></div>
+    </div>
+
+    <div class="txn">
+      <div class="ico debit">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="6" width="16" height="12" rx="2"/><path d="M4 10h16"/></svg>
+      </div>
+      <div class="txt">
+        <div class="title">Compra · Farmatodo</div>
+        <div class="sub">Punto de venta · Ayer 19:44</div>
+      </div>
+      <div class="amt">− Bs. 86<span class="cents">,75</span></div>
+    </div>
+
+    <div class="txn">
+      <div class="ico fee">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+      </div>
+      <div class="txt">
+        <div class="title">Comisión bancaria</div>
+        <div class="sub">Mantenimiento · Ayer 09:00</div>
+      </div>
+      <div class="amt">− Bs. 1<span class="cents">,50</span></div>
+    </div>
+  </div>
+
+  <div class="pad-bottom"></div>
+
+  <nav class="tabbar" data-od-id="tabbar">
+    <a class="active">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12l9-9 9 9"/><path d="M5 10v10h14V10"/></svg>
+      Inicio
+    </a>
+    <a href="08-estado-cuenta.html">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 14l4-4 3 3 5-5"/></svg>
+      Movimientos
+    </a>
+    <a href="05-transferencia.html">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h12"/><path d="M17 7l-4-4M17 7l-4 4"/><path d="M17 17H5"/><path d="M7 17l4-4M7 17l4 4"/></svg>
+      Enviar
+    </a>
+    <a href="04-perfil.html">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-7 8-7s8 3 8 7"/></svg>
+      Perfil
+    </a>
+  </nav>
+</div>
+</body>
+</html>

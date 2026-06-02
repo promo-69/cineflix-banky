@@ -1,0 +1,65 @@
+erDiagram
+    users ||--o{ transactions : "realiza"
+    banks ||--o{ transactions_transfers : "recibe en"
+    banks ||--o{ transactions_mobile_payments : "recibe en"
+    transactions ||--o| transactions_transfers : "detalle"
+    transactions ||--o| transactions_mobile_payments : "detalle"
+
+    banks {
+        INTEGER id PK
+        VARCHAR(4) code "UNIQUE"
+        VARCHAR(100) name
+        TIMESTAMP created_at
+        TIMESTAMP updated_at
+        TIMESTAMP deleted_at "Paranoid"
+    }
+
+    users {
+        INTEGER id PK
+        VARCHAR(20) document_id "UNIQUE"
+        VARCHAR(100) first_name 
+        VARCHAR(100) last_name 
+        VARCHAR(20) phone "UNIQUE"
+        VARCHAR(150) email "UNIQUE"
+        VARCHAR(255) password_hash 
+        VARCHAR(20) account_number "UNIQUE"
+        VARCHAR(255) webhook_url "Nullable"
+        VARCHAR(255) api_key "Nullable, UNIQUE"
+        TIMESTAMP created_at 
+        TIMESTAMP updated_at 
+        TIMESTAMP deleted_at "Paranoid"
+    }
+
+    transactions {
+        INTEGER id PK
+        INTEGER user_id FK
+        ENUM type "CREDIT / DEBIT"
+        ENUM method "TRANSFER / PAGO_MOVIL"
+        VARCHAR(50) reference "UNIQUE"
+        DECIMAL(15_2) amount 
+        DECIMAL(15_2) balance_after 
+        VARCHAR(255) concept "Nullable"
+        TIMESTAMP created_at 
+        TIMESTAMP updated_at
+        TIMESTAMP deleted_at "Paranoid"
+    }
+
+    transactions_transfers {
+        INTEGER transaction_id PK, FK
+        INTEGER destination_bank_id FK
+        VARCHAR(20) destination_account_number 
+        VARCHAR(20) destination_document 
+        TIMESTAMP created_at 
+        TIMESTAMP updated_at
+        TIMESTAMP deleted_at "Paranoid"
+    }
+
+    transactions_mobile_payments {
+        INTEGER transaction_id PK, FK
+        INTEGER destination_bank_id FK
+        VARCHAR(20) destination_phone 
+        VARCHAR(20) destination_document 
+        TIMESTAMP created_at 
+        TIMESTAMP updated_at
+        TIMESTAMP deleted_at "Paranoid"
+    }

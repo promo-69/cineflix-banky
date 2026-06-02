@@ -1,0 +1,324 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Estado de cuenta · Banco Aurora</title>
+<link rel="stylesheet" href="assets/styles.css" />
+<style>
+  .ec-app { background: var(--surface-2); }
+
+  .summary-bar {
+    background: var(--brand-core);
+    color: #fff;
+    padding: 4px 20px 20px;
+    border-radius: 0 0 24px 24px;
+  }
+  .summary-bar .acct-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 8px 0 14px;
+    border-bottom: 1px solid rgba(255,255,255,0.16);
+    margin-bottom: 14px;
+  }
+  .summary-bar .acct-row .lbl {
+    font-size: 11px; opacity: 0.7;
+    text-transform: uppercase; letter-spacing: 0.06em;
+  }
+  .summary-bar .acct-row .v {
+    font-family: var(--font-mono);
+    font-size: 14px;
+    font-weight: 600;
+  }
+  .summary-bar .acct-row select {
+    background: rgba(255,255,255,0.12);
+    border: 0;
+    color: #fff;
+    border-radius: 999px;
+    padding: 6px 10px;
+    font-size: 12px;
+    font-family: inherit;
+    font-weight: 500;
+  }
+  .summary-bar .stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+  .summary-bar .stat .l {
+    font-size: 10px; opacity: 0.7;
+    text-transform: uppercase; letter-spacing: 0.08em;
+    margin-bottom: 4px;
+  }
+  .summary-bar .stat .v {
+    font-family: var(--font-mono);
+    font-size: 17px;
+    font-weight: 600;
+    line-height: 1;
+  }
+  .summary-bar .stat .arrow {
+    display: inline-block;
+    font-size: 10px;
+    opacity: 0.8;
+    margin-left: 4px;
+  }
+  .summary-bar .stat .arrow.up   { color: var(--brand-accent); }
+  .summary-bar .stat .arrow.down { color: #FFC0CB; }
+
+  .filters {
+    padding: 16px 20px 8px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 2;
+  }
+  .filters .filter-head {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 10px;
+  }
+  .filters .filter-head h3 {
+    font-family: var(--font-display);
+    font-size: 14px;
+    font-weight: 600;
+    margin: 0;
+  }
+  .filters .filter-head .toolbox {
+    display: flex; gap: 6px;
+  }
+  .filters .filter-head button {
+    background: var(--surface-2);
+    border: 0;
+    border-radius: 999px;
+    width: 32px; height: 32px;
+    display: grid; place-items: center;
+    color: var(--brand-medium);
+    cursor: pointer;
+  }
+  .filters .filter-head button svg { width: 16px; height: 16px; }
+
+  .chips {
+    display: flex; gap: 8px;
+    overflow-x: auto;
+    margin: 0 -20px -2px;
+    padding: 0 20px 8px;
+    scrollbar-width: none;
+  }
+  .chips::-webkit-scrollbar { display: none; }
+
+  .ec-list {
+    padding: 0 20px;
+  }
+
+  .day-group {
+    margin-top: 16px;
+  }
+  .day-group .day-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    font-weight: 600;
+    padding: 8px 0 4px;
+    display: flex; justify-content: space-between; align-items: baseline;
+  }
+  .day-group .day-label .net {
+    font-family: var(--font-mono);
+    text-transform: none;
+    letter-spacing: 0;
+    color: var(--fg-soft);
+    font-weight: 500;
+  }
+  .day-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--r-md);
+    padding: 4px 14px;
+  }
+
+  .pagination {
+    display: flex; justify-content: center; align-items: center;
+    gap: 8px;
+    padding: 22px 0 16px;
+  }
+  .pagination .page {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    display: grid; place-items: center;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--fg-soft);
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .pagination .page.active {
+    background: var(--brand-core);
+    color: #fff;
+    border-color: var(--brand-core);
+  }
+  .pagination .page.arrow svg { width: 14px; height: 14px; color: var(--muted); }
+  .pagination .ellipsis { color: var(--muted); padding: 0 4px; }
+</style>
+</head>
+<body>
+<div class="app ec-app">
+  <header class="appbar" data-od-id="ec-appbar">
+    <a class="back-btn" href="03-dashboard.html" aria-label="Volver">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+    </a>
+    <h1>Estado de cuenta</h1>
+    <span class="spacer"></span>
+    <button class="icon-btn" aria-label="Buscar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+    </button>
+  </header>
+
+  <section class="summary-bar" data-od-id="summary">
+    <div class="acct-row">
+      <div>
+        <div class="lbl">Cuenta</div>
+        <div class="v">Corriente · •••• 4421</div>
+      </div>
+      <select aria-label="Cambiar cuenta">
+        <option>Mayo 2026</option>
+        <option>Abril 2026</option>
+        <option>Marzo 2026</option>
+      </select>
+    </div>
+
+    <div class="stats">
+      <div class="stat">
+        <div class="l">Ingresos</div>
+        <div class="v">Bs. 4.250,00<span class="arrow up">↑</span></div>
+      </div>
+      <div class="stat">
+        <div class="l">Egresos</div>
+        <div class="v">Bs. 2.180,45<span class="arrow down">↓</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="filters" data-od-id="filters">
+    <div class="filter-head">
+      <h3>Movimientos</h3>
+      <div class="toolbox">
+        <button aria-label="Calendario">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>
+        </button>
+        <button aria-label="Descargar">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v12"/><path d="m6 10 6 6 6-6"/><path d="M5 20h14"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="chips">
+      <span class="chip active">Todo</span>
+      <span class="chip">Transferencias</span>
+      <span class="chip">Pago móvil</span>
+      <span class="chip">Compras</span>
+      <span class="chip">Comisiones</span>
+      <span class="chip">Solo créditos</span>
+    </div>
+  </section>
+
+  <div class="ec-list" data-od-id="ec-list">
+
+    <div class="day-group">
+      <div class="day-label">
+        Hoy · 26 may
+        <span class="net">+ Bs. 743,50</span>
+      </div>
+      <div class="day-card">
+        <div class="txn">
+          <div class="ico credit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg></div>
+          <div class="txt"><div class="title">Pago móvil recibido</div><div class="sub">María Sosa · 14:22</div></div>
+          <div class="amt credit">+ Bs. 1.250<span class="cents">,00</span></div>
+        </div>
+        <div class="txn">
+          <div class="ico debit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7"/><path d="M8 7h9v9"/></svg></div>
+          <div class="txt"><div class="title">Transferencia · Banesco</div><div class="sub">Jorge Pacheco · 11:08</div></div>
+          <div class="amt">− Bs. 420<span class="cents">,00</span></div>
+        </div>
+        <div class="txn">
+          <div class="ico debit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="3" width="12" height="18" rx="2"/><path d="M11 18h2"/></svg></div>
+          <div class="txt"><div class="title">Pago móvil enviado</div><div class="sub">Patricia C. · 09:14</div></div>
+          <div class="amt">− Bs. 86<span class="cents">,50</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="day-group">
+      <div class="day-label">
+        Ayer · 25 may
+        <span class="net">− Bs. 88,25</span>
+      </div>
+      <div class="day-card">
+        <div class="txn">
+          <div class="ico debit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="6" width="16" height="12" rx="2"/><path d="M4 10h16"/></svg></div>
+          <div class="txt"><div class="title">Compra · Farmatodo</div><div class="sub">Punto de venta · 19:44</div></div>
+          <div class="amt">− Bs. 86<span class="cents">,75</span></div>
+        </div>
+        <div class="txn">
+          <div class="ico fee"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div>
+          <div class="txt"><div class="title">Comisión bancaria</div><div class="sub">Mantenimiento · 09:00</div></div>
+          <div class="amt">− Bs. 1<span class="cents">,50</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="day-group">
+      <div class="day-label">
+        22 may · viernes
+        <span class="net">+ Bs. 2.150,00</span>
+      </div>
+      <div class="day-card">
+        <div class="txn">
+          <div class="ico credit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg></div>
+          <div class="txt"><div class="title">Transferencia recibida</div><div class="sub">Nómina Tek-Vsla · 06:01</div></div>
+          <div class="amt credit">+ Bs. 2.150<span class="cents">,00</span></div>
+        </div>
+        <div class="txn">
+          <div class="ico debit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="3" width="12" height="18" rx="2"/><path d="M11 18h2"/></svg></div>
+          <div class="txt"><div class="title">Pago móvil enviado</div><div class="sub">Luis Bermúdez · 18:22</div></div>
+          <div class="amt">− Bs. 320<span class="cents">,00</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pagination" data-od-id="pagination" aria-label="Paginación">
+      <button class="page arrow" aria-label="Anterior">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg>
+      </button>
+      <button class="page active">1</button>
+      <button class="page">2</button>
+      <button class="page">3</button>
+      <span class="ellipsis">…</span>
+      <button class="page">12</button>
+      <button class="page arrow" aria-label="Siguiente">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <nav class="tabbar" data-od-id="tabbar">
+    <a href="03-dashboard.html">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12l9-9 9 9"/><path d="M5 10v10h14V10"/></svg>
+      Inicio
+    </a>
+    <a class="active">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 14l4-4 3 3 5-5"/></svg>
+      Movimientos
+    </a>
+    <a href="05-transferencia.html">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h12"/><path d="M17 7l-4-4M17 7l-4 4"/><path d="M17 17H5"/><path d="M7 17l4-4M7 17l4 4"/></svg>
+      Enviar
+    </a>
+    <a href="04-perfil.html">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-7 8-7s8 3 8 7"/></svg>
+      Perfil
+    </a>
+  </nav>
+</div>
+</body>
+</html>
