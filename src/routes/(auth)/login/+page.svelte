@@ -1,16 +1,18 @@
 <script lang="ts">
   import { enhance } from "$app/forms";
+  import Button from "$lib/components/ui/Button.svelte";
+  import DocumentInput from "$lib/components/ui/DocumentInput.svelte";
+  import Input from "$lib/components/ui/Input.svelte";
+  import AlertMessage from "$lib/components/ui/AlertMessage.svelte";
 
-  let cedula = $state("");
+  let docPrefix = $state("V");
+  let docNumber = $state("");
   let password = $state("");
   let loading = $state(false);
 
-  // Validación básica de cédula venezolana (V-12.345.678 o V-12345678)
-  let isCedulaValid = $derived(
-    /^V-\d{1,2}\.\d{3}\.\d{3}$/.test(cedula) ||
-      /^[VEJGP]-\d{8,9}$/.test(cedula),
-  );
-  let canSubmit = $derived(cedula.length > 0 && password.length > 0);
+  // Validación básica de números (7 a 9 dígitos)
+  let isCedulaValid = $derived(/^\d{7,9}$/.test(docNumber));
+  let canSubmit = $derived(docNumber.length > 0 && password.length > 0 && isCedulaValid);
 
   let { form } = $props();
 </script>
@@ -30,11 +32,7 @@
   <section class="login-card" data-od-id="login-form">
     <h2>Inicia sesión</h2>
 
-    {#if form?.error}
-      <div style="color: var(--danger); font-size: 13px; margin-bottom: 12px;">
-        {form.error}
-      </div>
-    {/if}
+    <AlertMessage {form} />
 
     <form
       method="POST"
@@ -47,45 +45,30 @@
       }}
     >
       <div class="field">
-        <label for="cedula">Cédula</label>
-        <div class="input-wrap">
-          <span class="lead-icon" aria-hidden="true">
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              ><rect x="3" y="5" width="18" height="14" rx="2" /><circle
-                cx="9"
-                cy="12"
-                r="2.5"
-              /><path d="M14 10h4M14 14h3" /></svg
-            >
-          </span>
-          <input
-            id="cedula"
-            name="cedula"
-            class="input with-icon"
-            type="text"
-            bind:value={cedula}
-            placeholder="V-12345678"
-            autocomplete="username"
-          />
-        </div>
-        {#if cedula && !isCedulaValid}
+        <label for="doc_number">Cédula de Identidad / RIF</label>
+        <DocumentInput
+          bind:prefix={docPrefix}
+          bind:number={docNumber}
+        />
+        {#if docNumber && !isCedulaValid}
           <span
             style="color: var(--danger); font-size: 11px; margin-top: 4px; display: block;"
-            >Formato inválido. Use V-12345678</span
+            >Formato numérico inválido</span
           >
         {/if}
       </div>
 
       <div class="field">
         <label for="pwd">Contraseña</label>
-        <div class="input-wrap">
-          <span class="lead-icon" aria-hidden="true">
+        <Input
+          id="pwd"
+          name="password"
+          type="password"
+          bind:value={password}
+          placeholder="••••••••••"
+          autocomplete="current-password"
+        >
+          {#snippet icon()}
             <svg
               viewBox="0 0 24 24"
               fill="none"
@@ -93,21 +76,12 @@
               stroke-width="2"
               stroke-linecap="round"
               stroke-linejoin="round"
+              style="width: 16px; height: 16px;"
               ><rect x="4" y="11" width="16" height="10" rx="2" /><path
                 d="M8 11V8a4 4 0 0 1 8 0v3"
-              /></svg
-            >
-          </span>
-          <input
-            id="pwd"
-            name="password"
-            class="input with-icon"
-            type="password"
-            bind:value={password}
-            placeholder="••••••••••"
-            autocomplete="current-password"
-          />
-        </div>
+              /></svg>
+          {/snippet}
+        </Input>
       </div>
 
       <div class="helper-row">
@@ -119,14 +93,17 @@
       </div>
 
       <div class="spacer"></div>
-      <button
+      
+      <Button
         type="submit"
-        class="btn primary"
-        disabled={!canSubmit || loading}
+        variant="primary"
+        disabled={!canSubmit}
+        {loading}
+        loadingText="Cargando..."
         style="width: 100%; border: none;"
       >
-        {loading ? "Cargando..." : "Entrar"}
-      </button>
+        Entrar
+      </Button>
     </form>
   </section>
 

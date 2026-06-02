@@ -19,8 +19,13 @@ export const LedgerService = {
       if (newSenderBalance < 0) throw new AppError('Saldo insuficiente');
 
       // 2. Lock receiver
+      // Banky's internal bank code is '0102'
+      if (!destinationAccount.startsWith('0102')) {
+        throw new AppError('El destino no es válido');
+      }
+
       const receiver = await User.findOne({ where: { document_id: destinationDocument, account_number: destinationAccount }, transaction: t, lock: true });
-      if (!receiver) throw new AppError('Usuario destino no encontrado');
+      if (!receiver) throw new AppError('No se consiguió el destino');
 
       // 3. Deduct from sender
       sender.balance = newSenderBalance; // sync UI cache
@@ -93,9 +98,16 @@ export const LedgerService = {
       
       if (newSenderBalance < 0) throw new AppError('Saldo insuficiente');
 
-      // 2. Find receiver (assuming internal mobile payment for MVP if bankCode is ours, otherwise it's external but MVP says no complexity, so let's handle internal)
-      // Actually we will just deduct balance regardless and assume external if no user found, but for MVP let's check internal.
+      // 2. Validate external banks
+      if (bankCode !== '0102') {
+        throw new AppError('El destino no es válido');
+      }
+
+      // 3. Find receiver
       const receiver = await User.findOne({ where: { document_id: destinationDocument, phone: destinationPhone }, transaction: t, lock: true });
+      if (!receiver) {
+        throw new AppError('No se consiguió el destino');
+      }
       
       // Deduct from sender
       sender.balance = newSenderBalance; // sync UI cache

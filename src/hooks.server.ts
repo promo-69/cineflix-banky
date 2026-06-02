@@ -20,7 +20,7 @@ export const handle: Handle = async ({ event, resolve }) => {
   }
 
   // 2. Interceptar rutas internas protegidas /(app)
-  const isProtectedRoute = ['/dashboard', '/transferencia', '/pago-movil', '/perfil', '/estado-cuenta'].some(r => path.startsWith(r));
+  const isProtectedRoute = ['/dashboard', '/transferencia', '/pago-movil', '/perfil', '/estado-cuenta', '/directorio'].some(r => path.startsWith(r));
   if (isProtectedRoute) {
     const token = event.cookies.get('session');
     if (!token) {

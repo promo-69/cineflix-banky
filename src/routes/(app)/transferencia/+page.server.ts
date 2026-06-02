@@ -1,22 +1,46 @@
 import { fail, redirect } from '@sveltejs/kit';
 import { LedgerService } from '$lib/server/services/LedgerService';
-import { User } from '$lib/server/database/models';
+import { User, AccountDirectory, MobilePaymentDirectory } from '$lib/server/database/models';
 import type { Actions, PageServerLoad } from './$types';
 import { customAlphabet } from 'nanoid';
 import { AppError } from '$lib/server/utils/AppError';
 
 const generateNumericReference = customAlphabet('0123456789', 20);
 
-export const load: PageServerLoad = async ({ url, locals }) => {
-	const user = await User.findByPk(locals.user?.id);
-	const tab = url.searchParams.get('tab') === 'pago_movil' ? 'pago_movil' : 'transferencia';
-	return { balance: Number(user?.balance || 0), tab };
+export const load: PageServerLoad = async ({ locals }) => {
+	const sessionUser = locals.user;
+	if (!sessionUser) throw redirect(303, '/login');
+
+	const user = await User.findByPk(sessionUser.id);
+	if (!user) throw redirect(303, '/login');
+
+	const balance = Number(user.balance || 0);
+	
+	const accounts = await AccountDirectory.getAll({ where: { user_id: user.id }, raw: true });
+	const mobilePayments = await MobilePaymentDirectory.getAll({ where: { user_id: user.id }, raw: true });
+
+	return {
+		user: {
+			first_name: user.first_name,
+			last_name: user.last_name,
+			document_id: user.document_id,
+			account_number: user.account_number,
+		},
+		balance,
+		accounts,
+		mobilePayments,
+	};
 };
 
 export const actions: Actions = {
 	transfer: async ({ request, locals }) => {
 		const data = await request.formData();
-		const destinationDocument = data.get('destination_document')?.toString();
+		let destinationDocument = data.get('destination_document')?.toString();
+		if (!destinationDocument) {
+			const docPrefix = data.get('doc_prefix')?.toString() || 'V';
+			const docNumber = data.get('doc_number')?.toString();
+			if (docNumber) destinationDocument = `${docPrefix}-${docNumber}`;
+		}
 		const destinationAccount = data.get('destination_account')?.toString();
 		const amountStr = data.get('amount')?.toString();
 		const amount = Number(amountStr);
@@ -57,7 +81,12 @@ export const actions: Actions = {
 
 	mobilePayment: async ({ request, locals }) => {
 		const data = await request.formData();
-		const destinationDocument = data.get('destination_document')?.toString();
+		let destinationDocument = data.get('destination_document')?.toString();
+		if (!destinationDocument) {
+			const docPrefix = data.get('doc_prefix')?.toString() || 'V';
+			const docNumber = data.get('doc_number')?.toString();
+			if (docNumber) destinationDocument = `${docPrefix}-${docNumber}`;
+		}
 		const destinationPhone = data.get('destination_phone')?.toString();
 		const bankCode = data.get('bank_code')?.toString();
 		const amountStr = data.get('amount')?.toString();

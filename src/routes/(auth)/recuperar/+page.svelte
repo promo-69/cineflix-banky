@@ -1,4 +1,9 @@
 <script lang="ts">
+  import Button from "$lib/components/ui/Button.svelte";
+  import DocumentInput from "$lib/components/ui/DocumentInput.svelte";
+
+  let docPrefix = $state("V");
+  let docNumber = $state("");
 </script>
 
 <div class="app login-app">
@@ -11,12 +16,17 @@
   <section class="login-card">
     <form>
       <div class="field">
-        <label for="cedula">Cédula</label>
-        <div class="input-wrap">
-          <input id="cedula" type="text" class="input" placeholder="V-12345678" />
-        </div>
+        <label for="cedula">Cédula / RIF</label>
+        <DocumentInput
+          bind:prefix={docPrefix}
+          bind:number={docNumber}
+        />
       </div>
-      <button type="button" class="btn primary" style="width: 100%; border: none;">Enviar código</button>
+
+      <div class="spacer" style="height: 24px;"></div>
+      <Button type="submit" variant="primary" style="width: 100%; border: none;">
+        Enviar código
+      </Button>
     </form>
   </section>
 </div>

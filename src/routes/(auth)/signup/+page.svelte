@@ -1,12 +1,18 @@
 <script lang="ts">
   import { enhance } from "$app/forms";
   import type { ActionData } from "./$types";
+  import Button from "$lib/components/ui/Button.svelte";
+  import DocumentInput from "$lib/components/ui/DocumentInput.svelte";
+  import Input from "$lib/components/ui/Input.svelte";
+  import Select from "$lib/components/ui/Select.svelte";
+  import AlertMessage from "$lib/components/ui/AlertMessage.svelte";
 
   let { form }: { form: ActionData } = $props();
 
   let firstName = $state("");
   let lastName = $state("");
-  let documentId = $state("");
+  let docPrefix = $state("V");
+  let docNumber = $state("");
   let phonePrefix = $state("0414");
   let phoneNumber = $state("");
   let email = $state("");
@@ -16,10 +22,8 @@
   // Validaciones en tiempo real
   let isFirstNameValid = $derived(firstName.length >= 2);
   let isLastNameValid = $derived(lastName.length >= 2);
-  let isDocumentValid = $derived(
-    /^V-\d{1,2}\.\d{3}\.\d{3}$/.test(documentId) ||
-      /^[VEJGP]-\d{8,9}$/.test(documentId),
-  );
+  let isDocumentValid = $derived(/^\d{7,9}$/.test(docNumber));
+
   let isPhoneValid = $derived(/^\d{7}$/.test(phoneNumber));
   let isEmailValid = $derived(/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email));
   let isPasswordValid = $derived(password.length >= 8);
@@ -32,11 +36,6 @@
       isEmailValid &&
       isPasswordValid,
   );
-
-  function getValidationClass(value: string, isValid: boolean) {
-    if (!value) return "";
-    return isValid ? "is-valid" : "is-invalid";
-  }
 </script>
 
 <div class="app login-app">
@@ -61,13 +60,7 @@
   </header>
 
   <div class="login-card">
-    {#if form?.error}
-      <div
-        style="background: var(--danger); color: white; padding: 12px; border-radius: var(--r-md); margin-bottom: 20px; font-size: 14px;"
-      >
-        {form.error}
-      </div>
-    {/if}
+    <AlertMessage {form} />
 
     <form
       method="POST"
@@ -82,80 +75,45 @@
       <div class="form-row">
         <div class="field">
           <label for="first_name">Nombres</label>
-          <input
+          <Input
             id="first_name"
             name="first_name"
-            class="input {getValidationClass(firstName, isFirstNameValid)}"
             type="text"
             placeholder="Ej. Carlos"
             bind:value={firstName}
+            restrict="alpha"
+            isValid={firstName ? isFirstNameValid : undefined}
           />
         </div>
         <div class="field">
           <label for="last_name">Apellidos</label>
-          <input
+          <Input
             id="last_name"
             name="last_name"
-            class="input {getValidationClass(lastName, isLastNameValid)}"
             type="text"
             placeholder="Ej. Pérez"
             bind:value={lastName}
+            restrict="alpha"
+            isValid={lastName ? isLastNameValid : undefined}
           />
         </div>
       </div>
 
       <div class="field">
-        <label for="document_id">Cédula de Identidad / RIF</label>
-        <div class="input-wrap">
-          <span
-            class="icon"
-            aria-hidden="true"
-            style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--muted-2);"
-          >
-            <svg
-              width="18"
-              height="18"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              ><rect x="3" y="4" width="18" height="18" rx="2" ry="2" /><line
-                x1="16"
-                y1="2"
-                x2="16"
-                y2="6"
-              /><line x1="8" y1="2" x2="8" y2="6" /><line
-                x1="3"
-                y1="10"
-                x2="21"
-                y2="10"
-              /><path d="M9 16l2 2 4-4" /></svg
-            >
-          </span>
-          <input
-            id="document_id"
-            name="document_id"
-            class="input with-icon {getValidationClass(
-              documentId,
-              isDocumentValid,
-            )}"
-            type="text"
-            placeholder="V-12345678"
-            style="font-family: var(--font-mono); padding-left: 40px;"
-            bind:value={documentId}
-          />
-        </div>
+        <label for="doc_number">Cédula de Identidad / RIF</label>
+        <DocumentInput
+          bind:prefix={docPrefix}
+          bind:number={docNumber}
+          isValid={docNumber ? isDocumentValid : undefined}
+        />
       </div>
 
       <div class="field">
         <label for="phone">Teléfono celular</label>
-        <div class="form-row" style="gap: 8px;">
-          <select
+        <div class="form-row" style="display: flex; align-items: center; gap: 8px;">
+          <Select
             name="phone_prefix"
-            class="input"
-            style="font-family: var(--font-mono); width: 85px; flex-shrink: 0; padding: 0 8px;"
+            style="font-family: var(--font-mono); width: 85px; flex-shrink: 0;"
             bind:value={phonePrefix}
           >
             <option>0414</option>
@@ -163,28 +121,32 @@
             <option>0412</option>
             <option>0416</option>
             <option>0426</option>
-          </select>
-          <input
+          </Select>
+          <Input
             id="phone"
             name="phone_number"
-            class="input {getValidationClass(phoneNumber, isPhoneValid)}"
             type="tel"
             placeholder="1234567"
             style="font-family: var(--font-mono); letter-spacing: 0.06em; flex: 1;"
             bind:value={phoneNumber}
-            maxlength="7"
+            restrict="phone"
+            maxlength={7}
+            isValid={phoneNumber ? isPhoneValid : undefined}
           />
         </div>
       </div>
 
       <div class="field">
         <label for="email">Correo electrónico</label>
-        <div class="input-wrap">
-          <span
-            class="icon"
-            aria-hidden="true"
-            style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--muted-2);"
-          >
+        <Input
+          id="email"
+          name="email"
+          type="email"
+          placeholder="correo@ejemplo.com"
+          bind:value={email}
+          isValid={email ? isEmailValid : undefined}
+        >
+          {#snippet icon()}
             <svg
               width="18"
               height="18"
@@ -196,29 +158,22 @@
               stroke-linejoin="round"
               ><path
                 d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"
-              /><polyline points="22,6 12,13 2,6" /></svg
-            >
-          </span>
-          <input
-            id="email"
-            name="email"
-            class="input with-icon {getValidationClass(email, isEmailValid)}"
-            type="email"
-            placeholder="correo@ejemplo.com"
-            style="padding-left: 40px;"
-            bind:value={email}
-          />
-        </div>
+              /><polyline points="22,6 12,13 2,6" /></svg>
+          {/snippet}
+        </Input>
       </div>
 
       <div class="field">
         <label for="pwd">Contraseña segura</label>
-        <div class="input-wrap">
-          <span
-            class="icon"
-            aria-hidden="true"
-            style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--muted-2);"
-          >
+        <Input
+          id="pwd"
+          name="password"
+          type="password"
+          placeholder="Mínimo 8 caracteres"
+          bind:value={password}
+          isValid={password ? isPasswordValid : undefined}
+        >
+          {#snippet icon()}
             <svg
               width="18"
               height="18"
@@ -230,33 +185,22 @@
               stroke-linejoin="round"
               ><rect x="3" y="11" width="18" height="11" rx="2" ry="2" /><path
                 d="M7 11V7a5 5 0 0 1 10 0v4"
-              /></svg
-            >
-          </span>
-          <input
-            id="pwd"
-            name="password"
-            class="input with-icon {getValidationClass(
-              password,
-              isPasswordValid,
-            )}"
-            type="password"
-            placeholder="Mínimo 8 caracteres"
-            style="padding-left: 40px;"
-            bind:value={password}
-          />
-        </div>
+              /></svg>
+          {/snippet}
+        </Input>
       </div>
 
       <div class="spacer"></div>
-      <button
-        class="btn primary"
+      <Button
         type="submit"
+        variant="primary"
+        disabled={!canSubmit}
+        {loading}
+        loadingText="Procesando..."
         style="width: 100%; border: none;"
-        disabled={!canSubmit || loading}
       >
-        {loading ? "Procesando..." : "Registrarme"}
-      </button>
+        Registrarme
+      </Button>
 
       <div class="helper-row">
         <span>¿Ya tienes una cuenta? <a href="/login">Inicia sesión</a></span>

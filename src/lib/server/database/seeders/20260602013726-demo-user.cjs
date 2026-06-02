@@ -34,6 +34,18 @@ module.exports = {
 					last_name: 'Alvarez',
 					balance: 2000.0,
 				},
+				{
+					document_id: 'V-28019240',
+					email: 'test2@example.com',
+					phone: '04121502028',
+					account_number: '01029280192400987654',
+					password_hash,
+					api_key: 'sk_test_key_456',
+					webhook_url: null,
+					first_name: 'Alirio',
+					last_name: 'Freytez',
+					balance: 10000.0,
+				},
 			],
 			{},
 		);

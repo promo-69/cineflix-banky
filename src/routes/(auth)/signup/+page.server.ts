@@ -6,8 +6,11 @@ export const actions: Actions = {
   default: async ({ request, cookies }) => {
     const data = await request.formData();
     
-    // We ignore first_name and last_name as per the database schema requirements for the MVP
-    const document_id = data.get('document_id')?.toString() || '';
+    const first_name = data.get('first_name')?.toString() || '';
+    const last_name = data.get('last_name')?.toString() || '';
+    const doc_prefix = data.get('doc_prefix')?.toString() || 'V';
+    const doc_number = data.get('doc_number')?.toString() || '';
+    const document_id = `${doc_prefix}-${doc_number}`;
     const phone_prefix = data.get('phone_prefix')?.toString() || '';
     const phone_number = data.get('phone_number')?.toString() || '';
     const email = data.get('email')?.toString() || '';
@@ -15,12 +18,12 @@ export const actions: Actions = {
 
     const phone = `${phone_prefix}${phone_number}`;
 
-    if (!document_id || !phone || !email || !password) {
+    if (!first_name || !last_name || !document_id || !phone || !email || !password) {
       return fail(400, { error: 'Todos los campos son obligatorios' });
     }
 
     try {
-      const { token } = await AuthService.registerUser(document_id, email, phone, password);
+      const { token } = await AuthService.registerUser(document_id, email, phone, password, first_name, last_name);
       
       // Set session cookie
       cookies.set('session', token, {

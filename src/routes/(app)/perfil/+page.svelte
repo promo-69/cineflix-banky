@@ -1,6 +1,8 @@
 <script lang="ts">
   import { enhance } from '$app/forms';
   import type { PageData, ActionData } from './$types';
+  import Button from "$lib/components/ui/Button.svelte";
+  import Input from "$lib/components/ui/Input.svelte";
 
   let { data, form }: { data: PageData, form: ActionData } = $props();
   let loadingWebhook = $state(false);
@@ -54,28 +56,28 @@
       <form method="POST" action="?/updateProfile" use:enhance={() => { loadingProfile = true; return async ({ update }) => { await update(); loadingProfile = false; }; }}>
         <div class="kv-row" style="display: block; border-bottom: 0; padding-bottom: 8px;">
           <div class="kv-label" style="margin-bottom: 8px;">Nombres</div>
-          <input type="text" name="first_name" class="input" bind:value={firstName} placeholder="Ingresa tus nombres" />
+          <Input type="text" name="first_name" bind:value={firstName} restrict="alpha" placeholder="Ingresa tus nombres" />
         </div>
 
         <div class="kv-row" style="display: block; border-bottom: 0; padding-bottom: 8px; padding-top: 8px;">
           <div class="kv-label" style="margin-bottom: 8px;">Apellidos</div>
-          <input type="text" name="last_name" class="input" bind:value={lastName} placeholder="Ingresa tus apellidos" />
+          <Input type="text" name="last_name" bind:value={lastName} restrict="alpha" placeholder="Ingresa tus apellidos" />
         </div>
 
         <div class="kv-row" style="display: block; border-bottom: 0; padding-bottom: 8px; padding-top: 8px;">
           <div class="kv-label" style="margin-bottom: 8px;">Teléfono móvil</div>
-          <input type="tel" name="phone" class="input mono" bind:value={phone} />
+          <Input type="tel" name="phone" class="mono" bind:value={phone} restrict="phone" />
         </div>
 
         <div class="kv-row" style="display: block; padding-bottom: 12px; padding-top: 8px;">
           <div class="kv-label" style="margin-bottom: 8px;">Correo electrónico</div>
-          <input type="email" name="email" class="input" bind:value={email} />
+          <Input type="email" name="email" bind:value={email} />
         </div>
 
         <div style="padding-bottom: 16px;">
-          <button type="submit" class="btn primary" disabled={loadingProfile || !hasProfileChanges}>
-            {loadingProfile ? 'Guardando...' : 'Guardar cambios'}
-          </button>
+          <Button type="submit" variant="primary" disabled={!hasProfileChanges} loading={loadingProfile}>
+            Guardar cambios
+          </Button>
         </div>
       </form>
     </div>
@@ -86,11 +88,11 @@
       <div class="kv-row" style="display: block;">
         <div class="kv-label" style="margin-bottom: 8px;">API Key</div>
         <div style="display: flex; gap: 8px; align-items: center;">
-          <input type="text" class="input mono" readonly value={form?.newApiKey || data.user?.api_key || 'No generada'} style="flex: 1;" />
+          <Input type="text" class="mono" readonly value={form?.newApiKey || data.user?.api_key || 'No generada'} style="flex: 1;" />
           <form method="POST" action="?/rotateApiKey" use:enhance={() => { rotatingApi = true; return async ({ update }) => { await update(); rotatingApi = false; }; }} style="flex: 0 0 auto;">
-            <button aria-label="Rotar API Key" class="btn secondary" style="padding: 10px; width: auto; min-width: 0;" disabled={rotatingApi}>
+            <Button aria-label="Rotar API Key" variant="secondary" style="padding: 10px; width: auto; min-width: 0;" loading={rotatingApi}>
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 16px; height: 16px;"><path d="M2 12A10 10 0 0 0 15 21.54A10 10 0 0 1 15 2.46A10 10 0 0 0 2 12Z"/><path d="M21 12h-6"/><path d="M18 15l3-3-3-3"/></svg>
-            </button>
+            </Button>
           </form>
         </div>
       </div>
@@ -98,10 +100,10 @@
       <div class="kv-row" style="display: block; border-bottom: 0;">
         <div class="kv-label" style="margin-bottom: 8px;">Webhook URL (Síncrono)</div>
         <form method="POST" action="?/updateWebhook" use:enhance={() => { loadingWebhook = true; return async ({ update }) => { await update(); loadingWebhook = false; }; }} style="display: flex; gap: 8px; align-items: center;">
-          <input type="url" name="webhook_url" class="input" bind:value={webhookUrl} placeholder="https://tu-sistema.com/webhook" style="flex: 1; min-width: 0;" />
-          <button type="submit" class="btn secondary" style="padding: 10px 14px; width: auto; flex: 0 0 auto;" disabled={loadingWebhook}>
-            {loadingWebhook ? '...' : 'Guardar'}
-          </button>
+          <Input type="url" name="webhook_url" bind:value={webhookUrl} placeholder="https://tu-sistema.com/webhook" style="flex: 1; min-width: 0;" />
+          <Button type="submit" variant="secondary" style="padding: 10px 14px; width: auto; flex: 0 0 auto;" loading={loadingWebhook}>
+            Guardar
+          </Button>
         </form>
       </div>
     </div>
