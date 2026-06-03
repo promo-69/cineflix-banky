@@ -110,10 +110,7 @@
 		overflow-y: auto;
 		padding-bottom: 24px;
 		background: var(--surface-2);
-
-		@media (max-width: 600px) {
-			max-width: 100%;
-		}
+		width: 100%;
 
 		& > * {
 			width: 100%;
@@ -142,6 +139,8 @@
 		animation: spin 1s linear infinite;
 	}
 	@keyframes spin {
-		to { transform: rotate(360deg); }
+		to {
+			transform: rotate(360deg);
+		}
 	}
 </style>
