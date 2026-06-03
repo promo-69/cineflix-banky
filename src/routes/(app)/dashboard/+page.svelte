@@ -1,6 +1,26 @@
 <script lang="ts">
 	import type { PageData } from './$types';
 	let { data }: { data: PageData } = $props();
+
+	const copyDetails = async () => {
+		const name = `${data.user?.first_name || ''} ${data.user?.last_name || ''}`.trim() || data.user?.document_id;
+		let text = `Datos de ${name} - Banky (0201)\n\n`;
+		text += `Nro de cuenta: ${data.user?.account_number}\n`;
+		text += `Cédula: ${data.user?.document_id}\n`;
+
+		if (data.user?.phone) {
+			text += `\n---- Sí tiene pago móvil disponible mediante:\n`;
+			text += `Teléfono: ${data.user?.phone}\n`;
+			text += `Cédula: ${data.user?.document_id}\n`;
+		}
+
+		try {
+			await navigator.clipboard.writeText(text);
+			alert('¡Datos copiados al portapapeles!');
+		} catch (err) {
+			console.error('Error al copiar:', err);
+		}
+	};
 </script>
 
 <div class="header-section">
@@ -35,6 +55,19 @@
 				<span class="l">Cuenta corriente</span><br />
 				<span class="v">{data.user?.account_number || '---'}</span>
 			</div>
+			<button class="copy-btn" onclick={copyDetails} title="Copiar mis datos">
+				<svg
+					viewBox="0 0 24 24"
+					fill="none"
+					stroke="currentColor"
+					stroke-width="2"
+					stroke-linecap="round"
+					stroke-linejoin="round"
+					><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path
+						d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"
+					></path></svg
+				>
+			</button>
 		</div>
 	</section>
 </div>

@@ -146,6 +146,7 @@
 					style="flex: 0 0 auto;"
 				>
 					<Button
+						type="submit"
 						aria-label="Rotar API Key"
 						variant="secondary"
 						style="padding: 10px; width: auto; min-width: 0;"

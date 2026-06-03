@@ -1,7 +1,14 @@
 <script lang="ts">
 	import Tabbar from '$lib/components/Tabbar.svelte';
+	import { navigating } from '$app/stores';
 	let { children } = $props();
 </script>
+
+{#if $navigating}
+	<div class="preloader">
+		<div class="spinner"></div>
+	</div>
+{/if}
 
 <div class="app-container">
 	<header class="app-header">
@@ -111,5 +118,30 @@
 		& > * {
 			width: 100%;
 		}
+	}
+
+	.preloader {
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background: rgba(var(--surface-rgb, 255, 255, 255), 0.7);
+		backdrop-filter: blur(4px);
+		z-index: 9999;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+	.spinner {
+		width: 48px;
+		height: 48px;
+		border: 4px solid var(--border);
+		border-top-color: var(--brand-core);
+		border-radius: 50%;
+		animation: spin 1s linear infinite;
+	}
+	@keyframes spin {
+		to { transform: rotate(360deg); }
 	}
 </style>

@@ -36,12 +36,12 @@ export const AuthService = {
 			throw new AppError('El documento ya está registrado');
 		}
 		const password_hash = await bcrypt.hash(password_raw, 10);
-		// Generar cuenta de 20 dígitos: 0102 (Banky) + 16 random digits
+		// Generar cuenta de 20 dígitos: 0201 (Banky) + 4 agencia + 2 control + 10 cuenta
 		const account_number =
-			'0102' +
-			Math.floor(Math.random() * 1e16)
-				.toString()
-				.padStart(16, '0');
+			'0201' +
+			Math.floor(Math.random() * 1e4).toString().padStart(4, '0') +
+			Math.floor(Math.random() * 1e2).toString().padStart(2, '0') +
+			Math.floor(Math.random() * 1e10).toString().padStart(10, '0');
 
 		const user = await User.createOne({
 			document_id,
