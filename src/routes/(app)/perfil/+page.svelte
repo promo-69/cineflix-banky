@@ -30,6 +30,10 @@
 	);
 </script>
 
+<svelte:head>
+	<title>{data.appName} | Mi perfil</title>
+</svelte:head>
+
 <header class="appbar" data-od-id="profile-appbar">
 	<a class="back-btn" href="/dashboard" aria-label="Volver">
 		<svg

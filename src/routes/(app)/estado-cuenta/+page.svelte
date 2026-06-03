@@ -4,6 +4,10 @@
 	let { data }: { data: PageData } = $props();
 </script>
 
+<svelte:head>
+	<title>{data.appName} | Estado de cuenta</title>
+</svelte:head>
+
 <header class="appbar">
 	<a class="back-btn" href="/dashboard" aria-label="Volver">
 		<svg

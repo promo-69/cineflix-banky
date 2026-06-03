@@ -23,6 +23,10 @@
 	};
 </script>
 
+<svelte:head>
+	<title>{data.appName} | Inicio</title>
+</svelte:head>
+
 <div class="header-section">
 	<header class="dash-header" data-od-id="dashboard-header">
 		<div class="top-row">

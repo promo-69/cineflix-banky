@@ -119,6 +119,10 @@
 	}
 </script>
 
+<svelte:head>
+	<title>{data.appName} | Directorio</title>
+</svelte:head>
+
 <header class="appbar" data-od-id="directorio-appbar">
 	<a class="back-btn" href="/dashboard" aria-label="Volver">
 		<svg

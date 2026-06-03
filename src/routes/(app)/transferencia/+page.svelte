@@ -101,6 +101,10 @@
 	}
 </script>
 
+<svelte:head>
+	<title>{data.appName} | Transferencias</title>
+</svelte:head>
+
 <header class="appbar" data-od-id="transfer-appbar">
 	<a class="back-btn" href="/dashboard" aria-label="Volver">
 		<svg

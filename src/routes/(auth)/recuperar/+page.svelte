@@ -1,10 +1,15 @@
 <script lang="ts">
+  import { page } from "$app/stores";
   import Button from "$lib/components/ui/Button.svelte";
   import DocumentInput from "$lib/components/ui/DocumentInput.svelte";
 
   let docPrefix = $state("V");
   let docNumber = $state("");
 </script>
+
+<svelte:head>
+	<title>{$page.data.appName} | Recuperar contraseña</title>
+</svelte:head>
 
 <div class="app auth-app">
   <header class="auth-hero">

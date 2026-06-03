@@ -3,6 +3,7 @@ import { AuthService } from '$lib/server/services/AuthService';
 import { User } from '$lib/server/database/models';
 
 export const handle: Handle = async ({ event, resolve }) => {
+  event.locals.appName = 'Banky';
   const path = event.url.pathname;
 
   // 1. Interceptar rutas de API
