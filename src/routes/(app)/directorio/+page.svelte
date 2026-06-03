@@ -1,10 +1,10 @@
 <script lang="ts">
 	import ConfirmModal from '$lib/components/ConfirmModal.svelte';
 	import { enhance } from '$app/forms';
-	import Button from "$lib/components/ui/Button.svelte";
-	import DocumentInput from "$lib/components/ui/DocumentInput.svelte";
-	import Input from "$lib/components/ui/Input.svelte";
-	import Select from "$lib/components/ui/Select.svelte";
+	import Button from '$lib/components/ui/Button.svelte';
+	import DocumentInput from '$lib/components/ui/DocumentInput.svelte';
+	import Input from '$lib/components/ui/Input.svelte';
+	import Select from '$lib/components/ui/Select.svelte';
 
 	import AlertMessage from '$lib/components/ui/AlertMessage.svelte';
 
@@ -15,7 +15,7 @@
 	// State for forms
 	let showForm = $state(false);
 	let formMode = $state<'create' | 'edit'>('create');
-	
+
 	let currentId = $state('');
 	let alias = $state('');
 	let bankCode = $state('0102');
@@ -59,7 +59,7 @@
 		currentId = contact.id;
 		alias = contact.alias;
 		bankCode = contact.bank_code;
-		
+
 		const docParts = contact.document_id.split('-');
 		if (docParts.length === 2) {
 			docPrefix = docParts[0];
@@ -93,10 +93,15 @@
 
 	function handleFormSubmit(e: Event) {
 		e.preventDefault();
-		const action = activeTab === 'cuentas' 
-			? (formMode === 'create' ? '?/createAccount' : '?/updateAccount')
-			: (formMode === 'create' ? '?/createMobile' : '?/updateMobile');
-		
+		const action =
+			activeTab === 'cuentas'
+				? formMode === 'create'
+					? '?/createAccount'
+					: '?/updateAccount'
+				: formMode === 'create'
+					? '?/createMobile'
+					: '?/updateMobile';
+
 		const title = formMode === 'create' ? 'Crear Contacto' : 'Actualizar Contacto';
 		const msg = `¿Estás seguro que deseas ${formMode === 'create' ? 'guardar' : 'actualizar'} este contacto?`;
 		requestAction(title, msg, action);
@@ -106,40 +111,73 @@
 		const action = activeTab === 'cuentas' ? '?/deleteAccount' : '?/deleteMobile';
 		// We set the currentId so the hidden form can pick it up
 		currentId = id;
-		requestAction('Eliminar Contacto', '¿Estás seguro que deseas eliminar este contacto? Esta acción no se puede deshacer.', action);
+		requestAction(
+			'Eliminar Contacto',
+			'¿Estás seguro que deseas eliminar este contacto? Esta acción no se puede deshacer.',
+			action,
+		);
 	}
 </script>
 
-<div class="directorio-page">
-	<header class="page-header">
-		<h1>Directorio de Contactos</h1>
-		<p>Gestiona tus cuentas bancarias y pagos móviles frecuentes.</p>
-	</header>
+<header class="appbar" data-od-id="directorio-appbar">
+	<a class="back-btn" href="/dashboard" aria-label="Volver">
+		<svg
+			viewBox="0 0 24 24"
+			fill="none"
+			stroke="currentColor"
+			stroke-width="2.2"
+			stroke-linecap="round"
+			stroke-linejoin="round"><path d="M15 18l-6-6 6-6" /></svg
+		>
+	</a>
+	<h1>Directorio</h1>
+</header>
 
+<div class="page-content general-margin">
 	<AlertMessage {form} />
 
 	<div class="tabs">
-		<button class="tab-btn" class:active={activeTab === 'cuentas'} onclick={() => { activeTab = 'cuentas'; resetForm(); }}>Cuentas Bancarias</button>
-		<button class="tab-btn" class:active={activeTab === 'movil'} onclick={() => { activeTab = 'movil'; resetForm(); }}>Pago Móvil</button>
+		<button
+			class="tab-btn"
+			class:active={activeTab === 'cuentas'}
+			onclick={() => {
+				activeTab = 'cuentas';
+				resetForm();
+			}}>Cuentas Bancarias</button
+		>
+		<button
+			class="tab-btn"
+			class:active={activeTab === 'movil'}
+			onclick={() => {
+				activeTab = 'movil';
+				resetForm();
+			}}>Pago Móvil</button
+		>
 	</div>
 
 	<div class="actions-bar">
-		<button class="btn primary" onclick={openCreate}>+ Añadir {activeTab === 'cuentas' ? 'Cuenta' : 'Pago Móvil'}</button>
+		<Button variant="primary" onclick={openCreate}
+			>+ Añadir {activeTab === 'cuentas' ? 'Cuenta' : 'Pago Móvil'}</Button
+		>
 	</div>
 
 	<!-- The actual form that will be submitted programmatically via requestSubmit -->
-	<form bind:this={formElement} method="POST" use:enhance={() => {
-		return async ({ update }) => {
-			await update();
-			resetForm();
-		};
-	}}>
+	<form
+		bind:this={formElement}
+		method="POST"
+		use:enhance={() => {
+			return async ({ update }) => {
+				await update();
+				resetForm();
+			};
+		}}
+	>
 		<!-- Hidden input for ID when editing or deleting -->
 		<input type="hidden" name="id" value={currentId} />
 
 		{#if showForm}
-			<div class="form-card">
-				<h3>{formMode === 'create' ? 'Nuevo Contacto' : 'Editar Contacto'}</h3>
+			<div class="form-card card">
+				<h3 style="margin-top: 0;">{formMode === 'create' ? 'Nuevo Contacto' : 'Editar Contacto'}</h3>
 				<div class="form-row">
 					<div class="field">
 						<label for="alias">Alias</label>
@@ -147,7 +185,14 @@
 					</div>
 					<div class="field">
 						<label for="name">Nombre Titular</label>
-						<Input id="name" name="name" bind:value={name} restrict="alpha" required placeholder="Nombre completo" />
+						<Input
+							id="name"
+							name="name"
+							bind:value={name}
+							restrict="alpha"
+							required
+							placeholder="Nombre completo"
+						/>
 					</div>
 				</div>
 
@@ -169,22 +214,37 @@
 					</div>
 					<div class="field">
 						<label for="doc_number">Cédula / RIF</label>
-						<DocumentInput
-							bind:prefix={docPrefix}
-							bind:number={docNumber}
-						/>
+						<DocumentInput bind:prefix={docPrefix} bind:number={docNumber} />
 					</div>
 				</div>
 
 				{#if activeTab === 'cuentas'}
 					<div class="field">
 						<label for="account_number">Número de Cuenta</label>
-						<Input restrict="numeric" id="account_number" name="account_number" bind:value={accountNumber} required minlength={20} maxlength={20} placeholder="20 dígitos" />
+						<Input
+							restrict="numeric"
+							id="account_number"
+							name="account_number"
+							bind:value={accountNumber}
+							required
+							minlength={20}
+							maxlength={20}
+							placeholder="20 dígitos"
+						/>
 					</div>
 				{:else}
 					<div class="field">
 						<label for="phone_number">Número de Teléfono</label>
-						<Input restrict="phone" id="phone_number" name="phone_number" bind:value={phoneNumber} required minlength={11} maxlength={11} placeholder="04141234567" />
+						<Input
+							restrict="phone"
+							id="phone_number"
+							name="phone_number"
+							bind:value={phoneNumber}
+							required
+							minlength={11}
+							maxlength={11}
+							placeholder="04141234567"
+						/>
 					</div>
 				{/if}
 
@@ -203,7 +263,7 @@
 			{:else}
 				<div class="cards-grid">
 					{#each data.accounts as acc}
-						<div class="contact-card">
+						<div class="contact-card card">
 							<div class="contact-header">
 								<div class="alias">{acc.alias}</div>
 								<div class="bank-tag">{acc.bank_code}</div>
@@ -213,99 +273,51 @@
 								<div class="number">{acc.account_number}</div>
 							</div>
 							<div class="contact-actions">
-								<button class="btn secondary small" onclick={() => openEdit(acc)}>Editar</button>
-								<button class="btn danger small" onclick={() => handleDelete(acc.id.toString())}>Eliminar</button>
+								<Button variant="secondary" onclick={() => openEdit(acc)} style="flex: 1;"
+									>Editar</Button
+								>
+								<Button
+									variant="danger-ghost"
+									onclick={() => handleDelete(acc.id.toString())}
+									style="flex: 1;">Eliminar</Button
+								>
 							</div>
 						</div>
 					{/each}
 				</div>
 			{/if}
+		{:else if data.mobilePayments.length === 0}
+			<div class="empty-state">No tienes contactos de pago móvil guardados.</div>
 		{:else}
-			{#if data.mobilePayments.length === 0}
-				<div class="empty-state">No tienes contactos de pago móvil guardados.</div>
-			{:else}
-				<div class="cards-grid">
-					{#each data.mobilePayments as movil}
-						<div class="contact-card">
-							<div class="contact-header">
-								<div class="alias">{movil.alias}</div>
-								<div class="bank-tag">{movil.bank_code}</div>
-							</div>
-							<div class="contact-body">
-								<div><strong>{movil.name}</strong> ({movil.document_id})</div>
-								<div class="number">{movil.phone_number}</div>
-							</div>
-							<div class="contact-actions">
-								<button class="btn secondary small" onclick={() => openEdit(movil)}>Editar</button>
-								<button class="btn danger small" onclick={() => handleDelete(movil.id.toString())}>Eliminar</button>
-							</div>
+			<div class="cards-grid">
+				{#each data.mobilePayments as movil}
+					<div class="contact-card card">
+						<div class="contact-header">
+							<div class="alias">{movil.alias}</div>
+							<div class="bank-tag">{movil.bank_code}</div>
 						</div>
-					{/each}
-				</div>
-			{/if}
+						<div class="contact-body">
+							<div><strong>{movil.name}</strong> ({movil.document_id})</div>
+							<div class="number">{movil.phone_number}</div>
+						</div>
+						<div class="contact-actions">
+							<Button variant="secondary" onclick={() => openEdit(movil)} style="flex: 1;">Editar</Button>
+							<Button
+								variant="danger-ghost"
+								onclick={() => handleDelete(movil.id.toString())}
+								style="flex: 1;">Eliminar</Button
+							>
+						</div>
+					</div>
+				{/each}
+			</div>
 		{/if}
 	</div>
 </div>
 
-<ConfirmModal 
-	bind:open={confirmOpen} 
-	title={confirmTitle} 
-	message={confirmMessage} 
-	onConfirm={() => pendingAction()} 
-/>
+<ConfirmModal bind:open={confirmOpen} title={confirmTitle} message={confirmMessage} onConfirm={() => pendingAction()} />
 
 <style>
-	.directorio-page {
-		padding: 24px;
-		max-width: 800px;
-		margin: 0 auto;
-	}
-	.page-header h1 {
-		font-family: var(--font-display);
-		font-size: 28px;
-		margin: 0 0 8px;
-	}
-	.page-header p {
-		color: var(--muted);
-		margin: 0 0 24px;
-	}
-	.error-banner {
-		background: var(--danger, #ef4444);
-		color: white;
-		padding: 12px;
-		border-radius: 8px;
-		margin-bottom: 24px;
-	}
-	.tabs {
-		display: flex;
-		gap: 8px;
-		border-bottom: 1px solid var(--border);
-		margin-bottom: 24px;
-	}
-	.tab-btn {
-		background: none;
-		border: none;
-		padding: 12px 24px;
-		font-size: 16px;
-		font-weight: 500;
-		color: var(--muted);
-		cursor: pointer;
-		border-bottom: 3px solid transparent;
-	}
-	.tab-btn.active {
-		color: var(--brand-core);
-		border-bottom-color: var(--brand-core);
-	}
-	.actions-bar {
-		margin-bottom: 24px;
-	}
-	.form-card {
-		background: var(--surface);
-		padding: 24px;
-		border-radius: var(--r-xl);
-		box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-		margin-bottom: 24px;
-	}
 	.form-row {
 		display: flex;
 		gap: 16px;
@@ -319,16 +331,7 @@
 		gap: 12px;
 		margin-top: 24px;
 	}
-	.cards-grid {
-		display: grid;
-		grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-		gap: 16px;
-	}
 	.contact-card {
-		background: var(--surface);
-		border: 1px solid var(--border);
-		border-radius: var(--r-lg);
-		padding: 16px;
 		display: flex;
 		flex-direction: column;
 		gap: 12px;
@@ -358,25 +361,11 @@
 		font-family: var(--font-mono);
 		margin-top: 4px;
 		color: var(--muted);
+		word-break: break-all;
 	}
 	.contact-actions {
 		display: flex;
 		gap: 8px;
 		margin-top: auto;
-	}
-	.btn.small {
-		padding: 6px 12px;
-		font-size: 13px;
-	}
-	.btn.danger {
-		background: rgba(239, 68, 68, 0.1);
-		color: #ef4444;
-	}
-	.empty-state {
-		text-align: center;
-		padding: 48px;
-		background: var(--surface);
-		border-radius: var(--r-lg);
-		color: var(--muted);
 	}
 </style>

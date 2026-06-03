@@ -77,6 +77,8 @@ export const AuthService = {
 	},
 
 	async updateProfile(userId: number, first_name: string, last_name: string, phone: string, email: string) {
-		await User.updateOne({ first_name, last_name, phone, email }, { where: { id: userId } });
+		const formatted_first_name = capitalizeName(first_name);
+		const formatted_last_name = capitalizeName(last_name);
+		await User.updateOne({ first_name: formatted_first_name, last_name: formatted_last_name, phone, email }, { where: { id: userId } });
 	},
 };

@@ -6,14 +6,14 @@
   let docNumber = $state("");
 </script>
 
-<div class="app login-app">
-  <header class="login-hero">
+<div class="app auth-app">
+  <header class="auth-hero">
     <a href="/login" style="color: #fff; text-decoration: none; margin-bottom: 24px; display: inline-block;">&larr; Volver al login</a>
     <h1>Recuperar Contraseña</h1>
     <p>Ingresa tu cédula y enviaremos un código de recuperación a tu teléfono.</p>
   </header>
 
-  <section class="login-card">
+  <section class="auth-card">
     <form>
       <div class="field">
         <label for="cedula">Cédula / RIF</label>

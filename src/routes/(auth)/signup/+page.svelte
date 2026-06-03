@@ -38,32 +38,22 @@
   );
 </script>
 
-<div class="app login-app">
-  <header class="login-hero">
-    <div class="brand-mark">
-      <svg
-        width="32"
-        height="32"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2.5"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        ><path d="M12 2L2 7l10 5 10-5-10-5Z" /><path d="M2 17l10 5 10-5" /><path
-          d="M2 12l10 5 10-5"
-        /></svg
-      >
+<div class="app auth-app">
+  <header class="auth-hero">
+    <div class="brand-mark light">
+      <span class="glyph" aria-hidden="true"></span>
+      <span class="word">banky</span>
     </div>
     <h1>Únete a Banky</h1>
     <p>Abre tu cuenta satélite en minutos y gestiona tus pagos al instante.</p>
   </header>
 
-  <div class="login-card">
+  <section class="auth-card">
     <AlertMessage {form} />
 
     <form
       method="POST"
+      action="?/register"
       use:enhance={() => {
         loading = true;
         return async ({ update }) => {
@@ -201,73 +191,21 @@
       >
         Registrarme
       </Button>
-
-      <div class="helper-row">
-        <span>¿Ya tienes una cuenta? <a href="/login">Inicia sesión</a></span>
-      </div>
     </form>
+  </section>
+  
+  <div class="auth-foot">
+    ¿Ya tienes cuenta? <a href="/login">Inicia sesión</a>
   </div>
 </div>
 
 <style>
-  .login-app {
-    background: linear-gradient(
-      180deg,
-      var(--brand-core) 0%,
-      var(--brand-deep) 280px,
-      var(--bg) 280px
-    );
-  }
-  .login-hero {
-    color: #fff;
-    padding: 48px 24px 24px;
-    text-align: left;
-  }
-  .login-hero .brand-mark {
-    margin-bottom: 24px;
-  }
-  .login-hero h1 {
-    font-family: var(--font-display);
-    font-size: 26px;
-    font-weight: 600;
-    letter-spacing: -0.02em;
-    line-height: 1.2;
-    margin: 0 0 6px;
-  }
-  .login-hero p {
-    font-size: 14px;
-    opacity: 0.8;
-    margin: 0;
-    max-width: 280px;
-  }
-  .login-card {
-    margin: 0 20px;
-    background: var(--surface);
-    border-radius: var(--r-xl);
-    padding: 24px 20px;
-    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.06);
-  }
   .form-row {
     display: flex;
     gap: 12px;
   }
   .form-row .field {
     flex: 1;
-  }
-  .spacer {
-    height: 24px;
-  }
-  .helper-row {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 14px;
-    margin-top: 24px;
-  }
-  .helper-row a {
-    color: var(--brand-core);
-    text-decoration: none;
-    font-weight: 500;
   }
   /* Estado de error/éxito visual */
   :global(.input.is-valid) {

@@ -17,8 +17,8 @@
   let { form } = $props();
 </script>
 
-<div class="app login-app">
-  <header class="login-hero" data-od-id="login-hero">
+<div class="app auth-app">
+  <header class="auth-hero" data-od-id="login-hero">
     <div class="brand-mark light">
       <span class="glyph" aria-hidden="true"></span>
       <span class="word">banky</span>
@@ -29,7 +29,7 @@
     </p>
   </header>
 
-  <section class="login-card" data-od-id="login-form">
+  <section class="auth-card" data-od-id="login-form">
     <h2>Inicia sesión</h2>
 
     <AlertMessage {form} />
@@ -107,63 +107,17 @@
     </form>
   </section>
 
-  <div class="signup-foot">
+  <div class="auth-foot">
     ¿Aún no tienes cuenta? <a href="/signup">Ábrela aquí</a>
   </div>
 
-  <p class="legal">
+  <p class="auth-legal">
     Banky, C.A. — Institución Bancaria autorizada por la SUDEBAN.<br />
     Tu sesión está protegida por cifrado TLS 1.3.
   </p>
 </div>
 
 <style>
-  .login-app {
-    background: linear-gradient(
-      180deg,
-      var(--brand-core) 0%,
-      var(--brand-deep) 280px,
-      var(--bg) 280px
-    );
-  }
-  .login-hero {
-    color: #fff;
-    padding: 48px 24px 24px;
-    text-align: left;
-  }
-  .login-hero .brand-mark {
-    margin-bottom: 28px;
-  }
-  .login-hero h1 {
-    font-family: var(--font-display);
-    font-size: 26px;
-    font-weight: 600;
-    letter-spacing: -0.02em;
-    line-height: 1.2;
-    margin: 0 0 6px;
-  }
-  .login-hero p {
-    font-size: 14px;
-    opacity: 0.8;
-    margin: 0;
-    max-width: 280px;
-  }
-  .login-card {
-    margin: 0 20px;
-    background: var(--surface);
-    border-radius: var(--r-xl);
-    padding: 24px 22px;
-    box-shadow:
-      0 1px 2px rgba(4, 50, 99, 0.04),
-      0 12px 36px -12px rgba(4, 50, 99, 0.18);
-  }
-  .login-card h2 {
-    font-family: var(--font-display);
-    font-size: 17px;
-    font-weight: 600;
-    margin: 0 0 18px;
-    color: var(--brand-deep);
-  }
   .helper-row {
     display: flex;
     justify-content: space-between;
@@ -188,23 +142,5 @@
     font-size: 13px;
     text-decoration: none;
     font-weight: 500;
-  }
-  .signup-foot {
-    text-align: center;
-    padding: 24px 20px 32px;
-    color: var(--muted);
-    font-size: 13px;
-  }
-  .signup-foot a {
-    color: var(--brand-medium);
-    font-weight: 600;
-    text-decoration: none;
-    margin-left: 4px;
-  }
-  .legal {
-    text-align: center;
-    color: var(--muted-2);
-    font-size: 11px;
-    padding: 0 24px 24px;
   }
 </style>
