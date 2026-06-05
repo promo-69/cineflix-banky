@@ -7,7 +7,8 @@ export const handle: Handle = async ({ event, resolve }) => {
   const path = event.url.pathname;
 
   // 1. Interceptar rutas de API
-  if (path.startsWith('/api/')) {
+  // Excluimos /api/external/ ya que esas rutas manejan su propia autenticación con Bearer Token
+  if (path.startsWith('/api/') && !path.startsWith('/api/external/')) {
     const apiKey = event.request.headers.get('x-api-key');
     if (!apiKey) {
       return new Response(JSON.stringify({ error: 'Missing x-api-key' }), { status: 401, headers: { 'Content-Type': 'application/json' } });

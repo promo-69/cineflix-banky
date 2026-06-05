@@ -85,7 +85,7 @@
 		<div class="pagination-footer">
 			<div class="per-page">
 				Items per page:
-				<select class="limit-select" onchange={(e) => goto(`?page=1&limit=${e.target.value}`)}>
+				<select class="limit-select" onchange={(e) => goto(`?page=1&limit=${(e.currentTarget as HTMLSelectElement).value}`)}>
 					<option value="5" selected={data.pagination.limit === 5}>5</option>
 					<option value="15" selected={data.pagination.limit === 15}>15</option>
 					<option value="50" selected={data.pagination.limit === 50}>50</option>

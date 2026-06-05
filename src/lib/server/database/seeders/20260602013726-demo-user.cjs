@@ -1,6 +1,10 @@
 'use strict';
 
+// eslint-disable-next-line @typescript-eslint/no-require-imports
 const bcrypt = require('bcrypt');
+// eslint-disable-next-line @typescript-eslint/no-require-imports
+const { nanoid, customAlphabet } = require('nanoid');
+const generateNumericId = customAlphabet('0123456789', 16);
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
@@ -12,11 +16,11 @@ module.exports = {
 			[
 				{
 					document_id: 'V-12345678',
-					email: 'test@example.com',
+					email: 'alirio@example.com',
 					phone: '04141234567',
-					account_number: '02011234567890123456',
+					account_number: '02010100000101010101', //'0201' + generateNumericId(),
 					password_hash,
-					api_key: 'sk_test_key_123',
+					api_key: 'af4c7d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c', //nanoid(64),
 					webhook_url: null,
 					first_name: 'Alirio',
 					last_name: 'Perdomo',
@@ -24,11 +28,11 @@ module.exports = {
 				},
 				{
 					document_id: 'V-87654321',
-					email: 'test2@example.com',
+					email: 'miguel@example.com',
 					phone: '04249876543',
-					account_number: '02019876543210987654',
+					account_number: '02011239123123123231', //'0201' + generateNumericId(),
 					password_hash,
-					api_key: 'sk_test_key_456',
+					api_key: '1234567890123456789012345678901234567890123456789012345678901234', //nanoid(64),
 					webhook_url: null,
 					first_name: 'Miguel',
 					last_name: 'Alvarez',
@@ -36,11 +40,11 @@ module.exports = {
 				},
 				{
 					document_id: 'V-28019240',
-					email: 'test2@example.com',
+					email: 'freytez@example.com',
 					phone: '04121502028',
-					account_number: '02019280192400987654',
+					account_number: '02011231231231231233', //'0201' + generateNumericId(),
 					password_hash,
-					api_key: 'sk_test_key_456',
+					api_key: 'f2e4d6c8b0a2f4d6c8b0a2f4d6c8b0a2f4d6c8b0a2f4d6c8b0a2f4d6c8b0a2f4', //nanoid(64),
 					webhook_url: null,
 					first_name: 'Alirio',
 					last_name: 'Freytez',

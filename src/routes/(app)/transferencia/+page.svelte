@@ -12,7 +12,7 @@
 
 	let { data, form }: { data: PageData; form: ActionData } = $props();
 
-	let currentTab = $state(data.tab || 'transferencia');
+	let currentTab = $state((data as any).tab || 'transferencia');
 
 	// Transferencia state
 	let docPrefix = $state('V');
@@ -30,7 +30,7 @@
 	let pmDocPrefix = $state('V');
 	let pmDocNumber = $state('');
 	let pmPhone = $state('');
-	let pmBankCode = $state('0102');
+	let pmBankCode = $state('0201');
 	let pmAmountStr = $state('');
 	let pmLoading = $state(false);
 
@@ -143,7 +143,7 @@
 						if (result.type === 'failure') {
 							statusType = 'error';
 							statusTitle = 'Error';
-							statusMessage = result.data?.error || 'Ha ocurrido un error procesando la transferencia';
+							statusMessage = (result.data?.error as string) || 'Ha ocurrido un error procesando la transferencia';
 							showStatus = true;
 							await update();
 						} else if (result.type === 'success') {
@@ -223,7 +223,7 @@
 								name="destination_account"
 								class="mono"
 								bind:value={destinationAccount}
-								placeholder="01020000000000000000"
+								placeholder="02010000000000000000"
 								maxlength={20}
 								isValid={destinationAccount ? isAccountValid : undefined}
 							/>
@@ -287,7 +287,7 @@
 						if (result.type === 'failure') {
 							statusType = 'error';
 							statusTitle = 'Error';
-							statusMessage = result.data?.error || 'Ha ocurrido un error procesando el pago móvil';
+							statusMessage = (result.data?.error as string) || 'Ha ocurrido un error procesando el pago móvil';
 							showStatus = true;
 							await update();
 						} else if (result.type === 'success') {
@@ -352,7 +352,8 @@
 						<label for="bank_code">Banco Destino</label>
 						<div class="input-wrap">
 							<Select id="bank_code" name="bank_code" bind:value={pmBankCode}>
-								<option value="0102">0102 - Banky / Banco de Venezuela</option>
+								<option value="0201">0201 - Banky</option>
+								<option value="0102">0102 - Banco de Venezuela</option>
 								<option value="0104">0104 - Venezolano de Crédito</option>
 								<option value="0105">0105 - Mercantil</option>
 								<option value="0108">0108 - Provincial</option>

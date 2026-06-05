@@ -18,7 +18,7 @@
 
 	let currentId = $state('');
 	let alias = $state('');
-	let bankCode = $state('0102');
+	let bankCode = $state('0201');
 	let accountNumber = $state('');
 	let phoneNumber = $state('');
 	let docPrefix = $state('V');
@@ -38,7 +38,7 @@
 	function resetForm() {
 		currentId = '';
 		alias = '';
-		bankCode = '0102';
+		bankCode = '0201';
 		accountNumber = '';
 		phoneNumber = '';
 		docPrefix = 'V';
@@ -204,6 +204,7 @@
 					<div class="field">
 						<label for="bank_code">Banco</label>
 						<Select id="bank_code" name="bank_code" bind:value={bankCode}>
+							<option value="0201">Banky (0201)</option>
 							<option value="0102">Banco de Venezuela (0102)</option>
 							<option value="0104">Venezolano de Crédito (0104)</option>
 							<option value="0105">Mercantil (0105)</option>

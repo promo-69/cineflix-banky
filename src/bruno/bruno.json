@@ -1,0 +1,9 @@
+{
+  "version": "1",
+  "name": "Cineflix Bank API",
+  "type": "collection",
+  "ignore": [
+    "node_modules",
+    ".git"
+  ]
+}

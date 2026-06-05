@@ -4,16 +4,19 @@ import bcrypt from 'bcrypt';
 import { User } from '../database/models';
 import { env } from '$env/dynamic/private';
 import { capitalizeName } from '../utils/StringUtils';
+import { nanoid, customAlphabet } from 'nanoid';
+
+const generateNumericId = customAlphabet('0123456789', 16);
 
 const JWT_SECRET = env.JWT_SECRET || 'super_secret_dev_key';
 
 export const AuthService = {
 	async authenticateUser(document_id: string, password_raw: string) {
 		const user = await User.getOne({ where: { document_id } });
-		if (!user) throw new AppError('Credenciales inválidas');
+		if (!user) throw new AppError('Credenciales inválidas (1)');
 
 		const isValid = await bcrypt.compare(password_raw, user.password_hash);
-		if (!isValid) throw new AppError('Credenciales inválidas');
+		if (!isValid) throw new AppError('Credenciales inválidas (2)');
 
 		const token = jwt.sign({ id: user.id, document_id: user.document_id }, JWT_SECRET, { expiresIn: '1h' });
 
@@ -36,12 +39,8 @@ export const AuthService = {
 			throw new AppError('El documento ya está registrado');
 		}
 		const password_hash = await bcrypt.hash(password_raw, 10);
-		// Generar cuenta de 20 dígitos: 0201 (Banky) + 4 agencia + 2 control + 10 cuenta
-		const account_number =
-			'0201' +
-			Math.floor(Math.random() * 1e4).toString().padStart(4, '0') +
-			Math.floor(Math.random() * 1e2).toString().padStart(2, '0') +
-			Math.floor(Math.random() * 1e10).toString().padStart(10, '0');
+		// Generar cuenta de 20 dígitos: 0201 (Banky) + 16 dígitos aleatorios
+		const account_number = '0201' + generateNumericId();
 
 		const user = await User.createOne({
 			document_id,
@@ -65,9 +64,14 @@ export const AuthService = {
 		}
 	},
 
+	async authenticateApiKey(apiKey: string) {
+		const user = await User.getOne({ where: { api_key: apiKey } });
+		if (!user) throw new AppError('API Key inválida o no autorizada');
+		return user;
+	},
+
 	async rotateApiKey(userId: number) {
-		const newApiKey =
-			'sk_' + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+		const newApiKey = nanoid(64);
 		await User.updateOne({ api_key: newApiKey }, { where: { id: userId } });
 		return newApiKey;
 	},
@@ -79,6 +83,9 @@ export const AuthService = {
 	async updateProfile(userId: number, first_name: string, last_name: string, phone: string, email: string) {
 		const formatted_first_name = capitalizeName(first_name);
 		const formatted_last_name = capitalizeName(last_name);
-		await User.updateOne({ first_name: formatted_first_name, last_name: formatted_last_name, phone, email }, { where: { id: userId } });
+		await User.updateOne(
+			{ first_name: formatted_first_name, last_name: formatted_last_name, phone, email },
+			{ where: { id: userId } },
+		);
 	},
 };

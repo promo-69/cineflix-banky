@@ -1,0 +1,15 @@
+meta {
+  name: Consultar Transaccion A -> B.1
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}/api/external/transactions/{{referenceAB}}
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{apiKey}}
+}
