@@ -3,13 +3,13 @@
 // eslint-disable-next-line @typescript-eslint/no-require-imports
 const bcrypt = require('bcrypt');
 // eslint-disable-next-line @typescript-eslint/no-require-imports
-const { nanoid, customAlphabet } = require('nanoid');
-const generateNumericId = customAlphabet('0123456789', 16);
+const { customAlphabet } = require('nanoid');
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
 	async up(queryInterface, Sequelize) {
 		const password_hash = await bcrypt.hash('Clave123*', 10);
+		const mine_hash = await bcrypt.hash('Pastor55..', 10);
 
 		await queryInterface.bulkInsert(
 			'users',
@@ -43,7 +43,7 @@ module.exports = {
 					email: 'freytez@example.com',
 					phone: '04121502028',
 					account_number: '02011231231231231233', //'0201' + generateNumericId(),
-					password_hash,
+					password_hash: mine_hash,
 					api_key: 'f2e4d6c8b0a2f4d6c8b0a2f4d6c8b0a2f4d6c8b0a2f4d6c8b0a2f4d6c8b0a2f4', //nanoid(64),
 					webhook_url: null,
 					first_name: 'Alirio',

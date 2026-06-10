@@ -181,7 +181,7 @@
 				use:enhance={() => {
 					loadingWebhook = true;
 					return async ({ update }) => {
-						await update();
+						await update({ reset: false });
 						loadingWebhook = false;
 					};
 				}}

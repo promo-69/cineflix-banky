@@ -108,11 +108,13 @@ export const LedgerService = {
 
 			// Webhook Síncrono (Fire-and-forget)
 			if (receiver.webhook_url) {
-				fetch(receiver.webhook_url, {
-					method: 'POST',
-					headers: { 'Content-Type': 'application/json' },
-					body: JSON.stringify({ event: 'transfer_received', amount, reference }),
-				}).catch(console.error);
+				t.afterCommit(() => {
+					fetch(receiver.webhook_url!, {
+						method: 'POST',
+						headers: { 'Content-Type': 'application/json' },
+						body: JSON.stringify({ event: 'transfer_received', amount, reference }),
+					}).catch(console.error);
+				});
 			}
 
 			return txSender;
@@ -230,11 +232,13 @@ export const LedgerService = {
 				);
 
 				if (receiver.webhook_url) {
-					fetch(receiver.webhook_url, {
-						method: 'POST',
-						headers: { 'Content-Type': 'application/json' },
-						body: JSON.stringify({ event: 'mobile_payment_received', amount, reference }),
-					}).catch(console.error);
+					t.afterCommit(() => {
+						fetch(receiver.webhook_url!, {
+							method: 'POST',
+							headers: { 'Content-Type': 'application/json' },
+							body: JSON.stringify({ event: 'mobile_payment_received', amount, reference }),
+						}).catch(console.error);
+					});
 				}
 			}
 
