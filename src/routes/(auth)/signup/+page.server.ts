@@ -3,7 +3,7 @@ import { AuthService } from '$lib/server/services/AuthService';
 import type { Actions } from './$types';
 
 export const actions: Actions = {
-  default: async ({ request, cookies }) => {
+  register: async ({ request, cookies }) => {
     const data = await request.formData();
     
     const first_name = data.get('first_name')?.toString() || '';
