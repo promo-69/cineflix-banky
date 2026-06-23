@@ -1,0 +1,20 @@
+meta {
+  name: Create Transaction
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/api/transactions
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "type": "transfer",
+    "amount": 1,
+    "destination_document": "V-87654321",
+    "destination_account": "02011239123123123231"
+  }
+}

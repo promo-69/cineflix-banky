@@ -1,0 +1,22 @@
+meta {
+  name: Create User
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/api/admin/users
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "document_id": "V-99999999",
+    "first_name": "New",
+    "last_name": "User",
+    "email": "newuser@test.com",
+    "phone": "04120000000",
+    "password": "password123"
+  }
+}

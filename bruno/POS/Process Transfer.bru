@@ -1,0 +1,25 @@
+meta {
+  name: Process Transfer
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/api/v1/pos/transfer
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: Bearer mt_RI7xGuLUb4JWOsDTBx811SqiMAS6qC4z
+}
+
+body:json {
+  {
+    "sourceCard": "BRUNOTEST",
+    "destinationDocument": "V-87654321",
+    "destinationAccount": "02011239123123123231",
+    "amount": 2.50,
+    "reference": "Bruno POS Test"
+  }
+}

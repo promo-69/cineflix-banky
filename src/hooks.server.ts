@@ -7,8 +7,8 @@ export const handle: Handle = async ({ event, resolve }) => {
   const path = event.url.pathname;
 
   // 1. Interceptar rutas de API internas normales
-  // Excluimos /api/external/ y /api/admin/
-  if (path.startsWith('/api/') && !path.startsWith('/api/external/') && !path.startsWith('/api/admin/')) {
+  // Excluimos /api/external/, /api/admin/ y /api/v1/pos/
+  if (path.startsWith('/api/') && !path.startsWith('/api/external/') && !path.startsWith('/api/admin/') && !path.startsWith('/api/v1/pos/')) {
     const apiKey = event.request.headers.get('x-api-key');
     if (!apiKey) {
       return new Response(JSON.stringify({ error: 'Missing x-api-key' }), { status: 401, headers: { 'Content-Type': 'application/json' } });

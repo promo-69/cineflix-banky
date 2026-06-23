@@ -1,0 +1,18 @@
+meta {
+  name: Adjust Balance
+  type: http
+  seq: 5
+}
+
+post {
+  url: {{baseUrl}}/api/admin/users/1/adjustments
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "amount": 5.00,
+    "reason": "Testing Bruno"
+  }
+}

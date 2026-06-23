@@ -1,0 +1,18 @@
+meta {
+  name: Add Card
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{baseUrl}}/api/admin/users/1/cards
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "card_number": "BRUNO123",
+    "alias": "Bruno Test Card"
+  }
+}

@@ -1,0 +1,21 @@
+meta {
+  name: Update Profile
+  type: http
+  seq: 1
+}
+
+put {
+  url: {{baseUrl}}/api/admin/users/1
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "first_name": "Alirio",
+    "last_name": "Testing",
+    "email": "alirio@testing.com",
+    "phone": "04141234567",
+    "webhook_url": "https://webhook.site/test"
+  }
+}

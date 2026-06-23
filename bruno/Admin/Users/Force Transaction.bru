@@ -1,0 +1,22 @@
+meta {
+  name: Force Transaction
+  type: http
+  seq: 6
+}
+
+post {
+  url: {{baseUrl}}/api/admin/transactions
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "source_user_id": 1,
+    "type": "transfer",
+    "destination_document": "V-87654321",
+    "destination_account": "02011239123123123231",
+    "amount": 2.50,
+    "reference": "Force Bruno Test"
+  }
+}

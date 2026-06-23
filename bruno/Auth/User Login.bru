@@ -1,0 +1,17 @@
+meta {
+  name: User Login
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/login
+  body: multipartForm
+  auth: none
+}
+
+body:multipart-form {
+  doc_prefix: J
+  doc_number: 123456789
+  password: 123456789
+}
