@@ -245,4 +245,45 @@ export const LedgerService = {
 			return txSender;
 		});
 	},
+
+	async processAdminAdjustment(
+		userId: number,
+		amount: number,
+		reference: string,
+	) {
+		if (amount === 0) throw new AppError('El monto no puede ser cero');
+
+		return await sequelize.transaction(async (t) => {
+			const targetUser = await User.findByPk(userId, { transaction: t, lock: true });
+			if (!targetUser) throw new AppError('Usuario no encontrado');
+
+			const lastTx = await Transaction.findOne({
+				where: { user_id: targetUser.id },
+				order: [['id', 'DESC']],
+				transaction: t,
+				lock: true,
+			});
+			const balanceBefore = lastTx ? Number(lastTx.balance_after) : Number(targetUser.balance);
+			const newBalance = balanceBefore + amount;
+
+			if (newBalance < 0) throw new AppError('El ajuste dejaría el saldo en negativo');
+
+			targetUser.balance = newBalance;
+			await targetUser.save({ transaction: t });
+
+			const tx = await Transaction.create(
+				{
+					user_id: targetUser.id,
+					amount: amount,
+					type: 'admin_adjustment',
+					balance_before: balanceBefore,
+					balance_after: newBalance,
+					reference: reference,
+				},
+				{ transaction: t },
+			);
+
+			return tx;
+		});
+	},
 };

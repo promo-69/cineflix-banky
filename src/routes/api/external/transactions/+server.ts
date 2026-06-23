@@ -17,7 +17,7 @@ export const POST: RequestHandler = async ({ request }) => {
     const user = await AuthService.authenticateApiKey(token);
 
     const body = await request.json();
-    const { type, amount, destination_document, destination_account, destination_phone, bank_code } = body;
+    const { type, amount, destinationDocument, destinationAccount, destinationPhone, bankCode } = body;
 
     if (!amount || amount <= 0) {
       return json({ success: false, error: 'Monto inválido' }, { status: 400 });
@@ -27,15 +27,15 @@ export const POST: RequestHandler = async ({ request }) => {
     let resultTx;
 
     if (type === 'transfer') {
-      if (!destination_document || !destination_account) {
+      if (!destinationDocument || !destinationAccount) {
         return json({ success: false, error: 'Datos de transferencia incompletos' }, { status: 400 });
       }
-      resultTx = await LedgerService.processTransfer(user.id, destination_document, destination_account, amount, reference);
+      resultTx = await LedgerService.processTransfer(user.id, destinationDocument, destinationAccount, amount, reference);
     } else if (type === 'mobile_payment') {
-      if (!destination_document || !destination_phone || !bank_code) {
+      if (!destinationDocument || !destinationPhone || !bankCode) {
         return json({ success: false, error: 'Datos de pago móvil incompletos' }, { status: 400 });
       }
-      resultTx = await LedgerService.processMobilePayment(user.id, destination_document, destination_phone, bank_code, amount, reference);
+      resultTx = await LedgerService.processMobilePayment(user.id, destinationDocument, destinationPhone, bankCode, amount, reference);
     } else {
       return json({ success: false, error: 'Tipo de transacción no soportado' }, { status: 400 });
     }

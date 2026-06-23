@@ -6,9 +6,9 @@ export const handle: Handle = async ({ event, resolve }) => {
   event.locals.appName = 'Banky';
   const path = event.url.pathname;
 
-  // 1. Interceptar rutas de API
-  // Excluimos /api/external/ ya que esas rutas manejan su propia autenticación con Bearer Token
-  if (path.startsWith('/api/') && !path.startsWith('/api/external/')) {
+  // 1. Interceptar rutas de API internas normales
+  // Excluimos /api/external/ y /api/admin/
+  if (path.startsWith('/api/') && !path.startsWith('/api/external/') && !path.startsWith('/api/admin/')) {
     const apiKey = event.request.headers.get('x-api-key');
     if (!apiKey) {
       return new Response(JSON.stringify({ error: 'Missing x-api-key' }), { status: 401, headers: { 'Content-Type': 'application/json' } });
@@ -18,6 +18,20 @@ export const handle: Handle = async ({ event, resolve }) => {
       return new Response(JSON.stringify({ error: 'Invalid x-api-key' }), { status: 401, headers: { 'Content-Type': 'application/json' } });
     }
     event.locals.user = { id: user.id, document_id: user.document_id };
+    return resolve(event);
+  }
+
+  // 1.5 Interceptar rutas API admin
+  if (path.startsWith('/api/admin/')) {
+    const token = event.cookies.get('admin_session');
+    if (!token) {
+      return new Response(JSON.stringify({ error: 'No autorizado' }), { status: 401, headers: { 'Content-Type': 'application/json' } });
+    }
+    const decoded = await AuthService.verifyToken(token);
+    if (!decoded || decoded.role !== 'superuser') {
+      return new Response(JSON.stringify({ error: 'No autorizado' }), { status: 403, headers: { 'Content-Type': 'application/json' } });
+    }
+    event.locals.user = decoded;
     return resolve(event);
   }
 
@@ -36,15 +50,34 @@ export const handle: Handle = async ({ event, resolve }) => {
     event.locals.user = decoded;
   }
 
-  // 3. Redirigir de auth a dashboard si ya hay sesión
+  // 3. Redirigir de auth a dashboard si ya hay sesión normal
   const isAuthRoute = ['/login', '/signup', '/recuperar'].some(r => path === r) || path === '/';
   if (isAuthRoute) {
     const token = event.cookies.get('session');
     if (token) {
       const decoded = await AuthService.verifyToken(token);
-      if (decoded) throw redirect(303, '/dashboard');
+      if (decoded && decoded.role !== 'superuser') throw redirect(303, '/dashboard');
     }
     if (path === '/') throw redirect(303, '/login');
+  }
+
+  // 4. Proteger rutas del panel de admin
+  if (path.startsWith('/admin')) {
+    const token = event.cookies.get('admin_session');
+    if (path === '/admin/login') {
+      if (token) {
+        const decoded = await AuthService.verifyToken(token);
+        if (decoded && decoded.role === 'superuser') throw redirect(303, '/admin/dashboard');
+      }
+    } else {
+      if (!token) throw redirect(303, '/admin/login');
+      const decoded = await AuthService.verifyToken(token);
+      if (!decoded || decoded.role !== 'superuser') {
+        event.cookies.delete('admin_session', { path: '/' });
+        throw redirect(303, '/admin/login');
+      }
+      event.locals.user = decoded;
+    }
   }
 
   return resolve(event);

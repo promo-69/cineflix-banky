@@ -58,10 +58,31 @@ export const AuthService = {
 
 	async verifyToken(token: string) {
 		try {
-			return jwt.verify(token, JWT_SECRET) as { id: number; document_id: string };
+			return jwt.verify(token, JWT_SECRET) as { id: number; document_id: string; role?: string; username?: string };
 		} catch (e) {
 			return null;
 		}
+	},
+
+	async authenticateSuperUser(username: string, password_raw: string) {
+		const expectedUser = env.SUPERUSER_USERNAME;
+		const envPassword = env.SUPERUSER_PASSWORD;
+
+		if (!expectedUser || !envPassword) {
+			throw new AppError('Credenciales de superusuario no configuradas');
+		}
+
+		if (username !== expectedUser) {
+			throw new AppError('Credenciales inválidas');
+		}
+
+		const expectedHash = await bcrypt.hash(envPassword, 10);
+		const isValid = await bcrypt.compare(password_raw, expectedHash);
+
+		if (!isValid) throw new AppError('Credenciales inválidas');
+
+		const token = jwt.sign({ username, role: 'superuser' }, JWT_SECRET, { expiresIn: '8h' });
+		return { user: { username, role: 'superuser' }, token };
 	},
 
 	async authenticateApiKey(apiKey: string) {

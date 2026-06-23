@@ -5,6 +5,7 @@ export { TransactionMobilePayment } from './TransactionMobilePayment';
 export { AccountDirectory } from './AccountDirectory';
 export { MobilePaymentDirectory } from './MobilePaymentDirectory';
 export { Card } from './Card';
+export { MasterToken } from './MasterToken';
 
 import { User } from './User';
 import { Transaction } from './Transaction';

@@ -18,7 +18,7 @@
 	let addingCard = $state(false);
 	let newCardNumber = $state('');
 	let newCardAlias = $state('');
-	let deletingCardId = $state<string | null>(null);
+	let deletingCardId = $state<number | null>(null);
 
 	let showConfirm = $state(false);
 	let confirmTitle = $state('');
