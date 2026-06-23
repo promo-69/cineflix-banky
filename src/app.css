@@ -216,6 +216,8 @@ main.flush {
 
 /* ─── Auth Layouts ────────────────────────────────────── */
 .auth-app {
+	overflow-y: auto;
+	padding-bottom: 2em;
 	background: linear-gradient(180deg, var(--brand-core) 0%, var(--brand-deep) 280px, var(--surface-2) 280px);
 }
 .auth-hero {
@@ -536,6 +538,22 @@ select.input {
 	letter-spacing: -0.01em;
 }
 
+/* Estado de error/éxito visual */
+.input.is-valid,
+.field input.is-valid,
+.field select.is-valid,
+.field textarea.is-valid {
+	border-color: #10b981;
+	background: rgba(16, 185, 129, 0.05);
+}
+.input.is-invalid,
+.field input.is-invalid,
+.field select.is-invalid,
+.field textarea.is-invalid {
+	border-color: #ef4444;
+	background: rgba(239, 68, 68, 0.05);
+}
+
 /* ─── Buttons ─────────────────────────────────────────── */
 .btn {
 	display: inline-flex;
@@ -581,6 +599,14 @@ select.input {
 .btn.danger-ghost {
 	background: transparent;
 	color: var(--danger);
+}
+
+.btn:disabled {
+	background: var(--surface-3) !important;
+	color: var(--muted-2) !important;
+	border-color: var(--border) !important;
+	cursor: not-allowed !important;
+	pointer-events: none;
 }
 
 /* ─── Cards ───────────────────────────────────────────── */

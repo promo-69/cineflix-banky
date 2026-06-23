@@ -166,13 +166,13 @@
 						<label
 							style="display: flex; align-items: center; gap: 6px; font-weight: normal; cursor: pointer;"
 						>
-							<input type="radio" name="transfer_mode" value="manual" bind:group={transferEntryMode} />
+							<input type="radio" name="transfer_mode" value="manual" bind:group={transferEntryMode} onchange={() => { docNumber=''; destinationAccount=''; selectedAccountId=''; amountStr=''; }} />
 							Ingreso Manual
 						</label>
 						<label
 							style="display: flex; align-items: center; gap: 6px; font-weight: normal; cursor: pointer;"
 						>
-							<input type="radio" name="transfer_mode" value="contact" bind:group={transferEntryMode} />
+							<input type="radio" name="transfer_mode" value="contact" bind:group={transferEntryMode} onchange={() => { docNumber=''; destinationAccount=''; selectedAccountId=''; amountStr=''; }} />
 							Desde Directorio
 						</label>
 					</div>
@@ -271,7 +271,7 @@
 					>
 						Transferir
 					</Button>
-					<button type="submit" bind:this={submitTransferBtn} style="display: none;"></button>
+					<button type="submit" bind:this={submitTransferBtn} style="display: none;" disabled={!canSubmit}></button>
 				</div>
 			</form>
 		</div>
@@ -310,13 +310,13 @@
 						<label
 							style="display: flex; align-items: center; gap: 6px; font-weight: normal; cursor: pointer;"
 						>
-							<input type="radio" name="pm_mode" value="manual" bind:group={pmEntryMode} />
+							<input type="radio" name="pm_mode" value="manual" bind:group={pmEntryMode} onchange={() => { pmPhone=''; pmDocNumber=''; selectedMobileId=''; pmAmountStr=''; }} />
 							Ingreso Manual
 						</label>
 						<label
 							style="display: flex; align-items: center; gap: 6px; font-weight: normal; cursor: pointer;"
 						>
-							<input type="radio" name="pm_mode" value="contact" bind:group={pmEntryMode} />
+							<input type="radio" name="pm_mode" value="contact" bind:group={pmEntryMode} onchange={() => { pmPhone=''; pmDocNumber=''; selectedMobileId=''; pmAmountStr=''; }} />
 							Desde Directorio
 						</label>
 					</div>
@@ -432,7 +432,7 @@
 					>
 						Pagar
 					</Button>
-					<button type="submit" bind:this={submitPmBtn} style="display: none;"></button>
+					<button type="submit" bind:this={submitPmBtn} style="display: none;" disabled={!canSubmitPm}></button>
 				</div>
 			</form>
 		</div>

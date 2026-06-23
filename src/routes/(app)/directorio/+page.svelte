@@ -25,6 +25,18 @@
 	let docNumber = $state('');
 	let name = $state('');
 
+	let isAliasValid = $derived(alias.length > 0);
+	let isNameValid = $derived(name.length >= 2);
+	let isDocValid = $derived(/^\d{7,9}$/.test(docNumber));
+	let isAccountValid = $derived(/^\d{20}$/.test(accountNumber));
+	let isPhoneValid = $derived(/^04(14|24|12|16|26)-?\d{7}$/.test(phoneNumber) || /^\d{11}$/.test(phoneNumber));
+	
+	let canSubmit = $derived(
+		activeTab === 'cuentas'
+			? (isAliasValid && isNameValid && isDocValid && isAccountValid)
+			: (isAliasValid && isNameValid && isDocValid && isPhoneValid)
+	);
+
 	// Confirm Modal State
 	let confirmOpen = $state(false);
 	let confirmTitle = $state('');
@@ -185,7 +197,7 @@
 				<div class="form-row">
 					<div class="field">
 						<label for="alias">Alias</label>
-						<Input id="alias" name="alias" bind:value={alias} required placeholder="Ej. Casa, Trabajo" />
+						<Input id="alias" name="alias" bind:value={alias} required placeholder="Ej. Casa, Trabajo" isValid={alias ? isAliasValid : undefined} />
 					</div>
 					<div class="field">
 						<label for="name">Nombre Titular</label>
@@ -196,6 +208,7 @@
 							restrict="alpha"
 							required
 							placeholder="Nombre completo"
+							isValid={name ? isNameValid : undefined}
 						/>
 					</div>
 				</div>
@@ -219,7 +232,7 @@
 					</div>
 					<div class="field">
 						<label for="doc_number">Cédula / RIF</label>
-						<DocumentInput bind:prefix={docPrefix} bind:number={docNumber} />
+						<DocumentInput bind:prefix={docPrefix} bind:number={docNumber} isValid={docNumber ? isDocValid : undefined} />
 					</div>
 				</div>
 
@@ -235,6 +248,7 @@
 							minlength={20}
 							maxlength={20}
 							placeholder="20 dígitos"
+							isValid={accountNumber ? isAccountValid : undefined}
 						/>
 					</div>
 				{:else}
@@ -249,13 +263,14 @@
 							minlength={11}
 							maxlength={11}
 							placeholder="04141234567"
+							isValid={phoneNumber ? isPhoneValid : undefined}
 						/>
 					</div>
 				{/if}
 
 				<div class="form-actions">
 					<Button type="button" variant="secondary" onclick={resetForm}>Cancelar</Button>
-					<Button type="button" variant="primary" onclick={handleFormSubmit}>Guardar</Button>
+					<Button type="button" variant="primary" onclick={handleFormSubmit} disabled={!canSubmit}>Guardar</Button>
 				</div>
 			</div>
 		{/if}

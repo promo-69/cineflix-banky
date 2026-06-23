@@ -7,7 +7,7 @@ import { AppError } from '$lib/server/utils/AppError';
 
 const generateNumericReference = customAlphabet('0123456789', 20);
 
-export const load: PageServerLoad = async ({ locals }) => {
+export const load: PageServerLoad = async ({ locals, url }) => {
 	const sessionUser = locals.user;
 	if (!sessionUser) throw redirect(303, '/login');
 
@@ -19,6 +19,8 @@ export const load: PageServerLoad = async ({ locals }) => {
 	const accounts = await AccountDirectory.getAll({ where: { user_id: user.id }, raw: true });
 	const mobilePayments = await MobilePaymentDirectory.getAll({ where: { user_id: user.id }, raw: true });
 
+	const tab = url.searchParams.get('tab');
+
 	return {
 		user: {
 			first_name: user.first_name,
@@ -29,6 +31,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 		balance,
 		accounts,
 		mobilePayments,
+		tab,
 	};
 };
 

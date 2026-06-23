@@ -64,7 +64,7 @@
 			>
 				<div class="field">
 					<label for="doc_number">Cédula de Identidad / RIF</label>
-					<DocumentInput bind:prefix={docPrefix} bind:number={docNumber} />
+					<DocumentInput bind:prefix={docPrefix} bind:number={docNumber} isValid={docNumber ? isCedulaValid : undefined} />
 					{#if docNumber && !isCedulaValid}
 						<span style="color: var(--danger); font-size: 11px; margin-top: 4px; display: block;"
 							>Formato numérico inválido</span
@@ -81,6 +81,7 @@
 						bind:value={password}
 						placeholder="••••••••••"
 						autocomplete="current-password"
+						isValid={password ? password.length > 0 : undefined}
 					>
 						{#snippet icon()}
 							<svg

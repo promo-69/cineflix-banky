@@ -4,7 +4,7 @@
 
 	interface Props extends HTMLInputAttributes {
 		value?: string;
-		restrict?: 'numeric' | 'alpha' | 'phone';
+		restrict?: 'numeric' | 'alpha' | 'phone' | 'alphanumeric_upper';
 		isValid?: boolean | undefined;
 		icon?: Snippet;
 	}
@@ -36,6 +36,9 @@
 		} else if (restrict === 'alpha') {
 			// Only letters (including accents) and spaces
 			val = val.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, '');
+		} else if (restrict === 'alphanumeric_upper') {
+			// Only letters and numbers, forced to uppercase
+			val = val.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
 		}
 
 		if (target.value !== val) {
