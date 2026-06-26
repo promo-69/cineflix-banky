@@ -126,10 +126,13 @@
 			¿Aún no tienes cuenta? <a href="/signup">Ábrela aquí</a>
 		</div>
 
-		<p class="auth-legal">
-			Banky, C.A. — Institución Bancaria autorizada por la SUDEBAN.<br />
-			Tu sesión está protegida por cifrado TLS 1.3.
-		</p>
+		<div class="legal-footer">
+			<p class="auth-legal">
+				Banky, C.A. — Institución Bancaria autorizada por la SUDEBAN.<br />
+				Tu sesión está protegida por cifrado TLS 1.3.
+			</p>
+			<a href="/admin/login" class="admin-link">Acceso para personal del banco</a>
+		</div>
 	</div>
 </div>
 
@@ -158,5 +161,24 @@
 		font-size: 13px;
 		text-decoration: none;
 		font-weight: 500;
+	}
+	
+	.legal-footer {
+		text-align: center;
+	}
+	
+	.admin-link {
+		display: inline-block;
+		font-size: 12px;
+		color: var(--muted);
+		text-decoration: none;
+		opacity: 0.6;
+		margin-top: 1rem;
+		transition: opacity 0.2s ease, color 0.2s ease;
+	}
+	
+	.admin-link:hover {
+		opacity: 1;
+		color: var(--brand-core, #000);
 	}
 </style>

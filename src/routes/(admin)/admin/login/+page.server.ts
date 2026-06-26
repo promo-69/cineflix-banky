@@ -14,12 +14,12 @@ export const actions: Actions = {
 
 		try {
 			const { token } = await AuthService.authenticateSuperUser(username, password);
-			
+
 			cookies.set('admin_session', token, {
 				path: '/',
 				httpOnly: true,
 				sameSite: 'strict',
-				maxAge: 60 * 60 * 8 // 8 horas
+				maxAge: 60 * 60 * 8, // 8 horas
 			});
 
 			throw redirect(303, '/admin/dashboard');
@@ -27,5 +27,5 @@ export const actions: Actions = {
 			if (e.status === 303) throw e;
 			return fail(401, { error: e.message || 'Credenciales inválidas' });
 		}
-	}
+	},
 };

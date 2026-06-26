@@ -29,7 +29,7 @@ export const actions: Actions = {
 		if (!alias || !bank_code || !account_number || !doc_number || !name) {
 			return fail(400, { error: 'Todos los campos son obligatorios' });
 		}
-		
+
 		const document_id = `${doc_prefix}-${doc_number}`;
 		const formatted_name = capitalizeName(name);
 
@@ -68,7 +68,7 @@ export const actions: Actions = {
 		try {
 			await AccountDirectory.updateOne(
 				{ alias, bank_code, account_number, document_id, name: formatted_name },
-				{ where: { id: parseInt(id), user_id: locals.user!.id } }
+				{ where: { id: parseInt(id), user_id: locals.user!.id } },
 			);
 			return { success: true };
 		} catch (e: any) {
@@ -141,7 +141,7 @@ export const actions: Actions = {
 		try {
 			await MobilePaymentDirectory.updateOne(
 				{ alias, bank_code, phone_number, document_id, name: formatted_name },
-				{ where: { id: parseInt(id), user_id: locals.user!.id } }
+				{ where: { id: parseInt(id), user_id: locals.user!.id } },
 			);
 			return { success: true };
 		} catch (e: any) {

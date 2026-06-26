@@ -246,11 +246,7 @@ export const LedgerService = {
 		});
 	},
 
-	async processAdminAdjustment(
-		userId: number,
-		amount: number,
-		reference: string,
-	) {
+	async processAdminAdjustment(userId: number, amount: number, reference: string) {
 		if (amount === 0) throw new AppError('El monto no puede ser cero');
 
 		return await sequelize.transaction(async (t) => {

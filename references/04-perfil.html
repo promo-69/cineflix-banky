@@ -1,231 +1,385 @@
 <!doctype html>
 <html lang="es">
-<head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Mi perfil · Banco Aurora</title>
-<link rel="stylesheet" href="assets/styles.css" />
-<style>
-  .profile-hero {
-    background: var(--brand-core);
-    color: #fff;
-    padding: 0 20px 36px;
-    border-radius: 0 0 28px 28px;
-    text-align: center;
-  }
-  .profile-hero .avatar.lg {
-    margin: 14px auto 14px;
-    background: #fff;
-    color: var(--brand-core);
-    box-shadow: 0 0 0 4px rgba(255,255,255,0.18);
-  }
-  .profile-hero h2 {
-    font-family: var(--font-display);
-    font-size: 19px;
-    font-weight: 600;
-    margin: 0 0 2px;
-    letter-spacing: -0.01em;
-  }
-  .profile-hero .role {
-    font-size: 12px;
-    opacity: 0.78;
-    display: inline-flex; align-items: center; gap: 6px;
-    background: rgba(255,255,255,0.10);
-    padding: 4px 10px;
-    border-radius: 999px;
-    margin-top: 8px;
-  }
-  .profile-hero .role .dot {
-    width: 6px; height: 6px;
-    background: var(--brand-accent);
-    border-radius: 999px;
-  }
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>Mi perfil · Banco Aurora</title>
+		<link rel="stylesheet" href="assets/styles.css" />
+		<style>
+			.profile-hero {
+				background: var(--brand-core);
+				color: #fff;
+				padding: 0 20px 36px;
+				border-radius: 0 0 28px 28px;
+				text-align: center;
+			}
+			.profile-hero .avatar.lg {
+				margin: 14px auto 14px;
+				background: #fff;
+				color: var(--brand-core);
+				box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.18);
+			}
+			.profile-hero h2 {
+				font-family: var(--font-display);
+				font-size: 19px;
+				font-weight: 600;
+				margin: 0 0 2px;
+				letter-spacing: -0.01em;
+			}
+			.profile-hero .role {
+				font-size: 12px;
+				opacity: 0.78;
+				display: inline-flex;
+				align-items: center;
+				gap: 6px;
+				background: rgba(255, 255, 255, 0.1);
+				padding: 4px 10px;
+				border-radius: 999px;
+				margin-top: 8px;
+			}
+			.profile-hero .role .dot {
+				width: 6px;
+				height: 6px;
+				background: var(--brand-accent);
+				border-radius: 999px;
+			}
 
-  .profile-content {
-    margin-top: -24px;
-    padding: 0 20px 24px;
-  }
-  .pf-card {
-    background: var(--surface);
-    border-radius: var(--r-lg);
-    border: 1px solid var(--border);
-    padding: 0 16px;
-    margin-bottom: 14px;
-  }
-  .pf-card .card-title {
-    padding: 14px 0 4px;
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--muted);
-    font-weight: 600;
-  }
-  .info-note {
-    background: var(--success-soft);
-    border-radius: var(--r-md);
-    padding: 12px 14px;
-    color: var(--success);
-    font-size: 12px;
-    line-height: 1.5;
-    margin-bottom: 14px;
-    display: flex; gap: 10px;
-    align-items: flex-start;
-  }
-  .info-note .i {
-    color: var(--success);
-    flex-shrink: 0;
-  }
-  .info-note strong { display: block; font-weight: 600; margin-bottom: 2px; color: var(--success); }
+			.profile-content {
+				margin-top: -24px;
+				padding: 0 20px 24px;
+			}
+			.pf-card {
+				background: var(--surface);
+				border-radius: var(--r-lg);
+				border: 1px solid var(--border);
+				padding: 0 16px;
+				margin-bottom: 14px;
+			}
+			.pf-card .card-title {
+				padding: 14px 0 4px;
+				font-size: 11px;
+				text-transform: uppercase;
+				letter-spacing: 0.08em;
+				color: var(--muted);
+				font-weight: 600;
+			}
+			.info-note {
+				background: var(--success-soft);
+				border-radius: var(--r-md);
+				padding: 12px 14px;
+				color: var(--success);
+				font-size: 12px;
+				line-height: 1.5;
+				margin-bottom: 14px;
+				display: flex;
+				gap: 10px;
+				align-items: flex-start;
+			}
+			.info-note .i {
+				color: var(--success);
+				flex-shrink: 0;
+			}
+			.info-note strong {
+				display: block;
+				font-weight: 600;
+				margin-bottom: 2px;
+				color: var(--success);
+			}
 
-  .links-card .kv-row { padding: 16px 0; cursor: pointer; }
-  .links-card .kv-row svg { width: 18px; height: 18px; color: var(--muted-2); flex-shrink: 0; }
-  .links-card .kv-row .lico {
-    width: 32px; height: 32px;
-    background: var(--surface-2);
-    border-radius: 999px;
-    display: grid; place-items: center;
-    color: var(--brand-medium);
-    margin-right: 12px;
-    flex-shrink: 0;
-  }
-  .links-card .kv-row .lico svg { width: 16px; height: 16px; color: var(--brand-medium); }
-  .links-card .kv-row { display: flex; align-items: center; }
-  .links-card .kv-row .ltxt { flex: 1; font-size: 14px; font-weight: 500; color: var(--fg); }
-  .links-card .kv-row .lsub { font-size: 12px; color: var(--muted); font-weight: 400; }
+			.links-card .kv-row {
+				padding: 16px 0;
+				cursor: pointer;
+			}
+			.links-card .kv-row svg {
+				width: 18px;
+				height: 18px;
+				color: var(--muted-2);
+				flex-shrink: 0;
+			}
+			.links-card .kv-row .lico {
+				width: 32px;
+				height: 32px;
+				background: var(--surface-2);
+				border-radius: 999px;
+				display: grid;
+				place-items: center;
+				color: var(--brand-medium);
+				margin-right: 12px;
+				flex-shrink: 0;
+			}
+			.links-card .kv-row .lico svg {
+				width: 16px;
+				height: 16px;
+				color: var(--brand-medium);
+			}
+			.links-card .kv-row {
+				display: flex;
+				align-items: center;
+			}
+			.links-card .kv-row .ltxt {
+				flex: 1;
+				font-size: 14px;
+				font-weight: 500;
+				color: var(--fg);
+			}
+			.links-card .kv-row .lsub {
+				font-size: 12px;
+				color: var(--muted);
+				font-weight: 400;
+			}
 
-  .footer-action {
-    text-align: center;
-    margin-top: 8px;
-  }
-  .footer-action button {
-    background: none;
-    border: 0;
-    color: var(--danger);
-    font-size: 13px;
-    font-weight: 600;
-    padding: 14px;
-    cursor: pointer;
-    font-family: inherit;
-  }
-  .version {
-    text-align: center;
-    color: var(--muted-2);
-    font-size: 11px;
-    padding: 0 0 24px;
-  }
-</style>
-</head>
-<body>
-<div class="app">
-  <header class="appbar" data-od-id="profile-appbar">
-    <a class="back-btn" href="03-dashboard.html" aria-label="Volver">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
-    </a>
-    <h1>Mi perfil</h1>
-  </header>
+			.footer-action {
+				text-align: center;
+				margin-top: 8px;
+			}
+			.footer-action button {
+				background: none;
+				border: 0;
+				color: var(--danger);
+				font-size: 13px;
+				font-weight: 600;
+				padding: 14px;
+				cursor: pointer;
+				font-family: inherit;
+			}
+			.version {
+				text-align: center;
+				color: var(--muted-2);
+				font-size: 11px;
+				padding: 0 0 24px;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="app">
+			<header class="appbar" data-od-id="profile-appbar">
+				<a class="back-btn" href="03-dashboard.html" aria-label="Volver">
+					<svg
+						viewBox="0 0 24 24"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="2.2"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+					>
+						<path d="M15 18l-6-6 6-6" />
+					</svg>
+				</a>
+				<h1>Mi perfil</h1>
+			</header>
 
-  <section class="profile-hero" data-od-id="profile-hero">
-    <div class="avatar lg">EM</div>
-    <h2>Elías Mendoza García</h2>
-    <span class="role">
-      <span class="dot" aria-hidden="true"></span>
-      Cliente desde 2019
-    </span>
-  </section>
+			<section class="profile-hero" data-od-id="profile-hero">
+				<div class="avatar lg">EM</div>
+				<h2>Elías Mendoza García</h2>
+				<span class="role">
+					<span class="dot" aria-hidden="true"></span>
+					Cliente desde 2019
+				</span>
+			</section>
 
-  <section class="profile-content">
+			<section class="profile-content">
+				<div class="info-note">
+					<span class="i" aria-hidden="true">
+						<svg
+							width="16"
+							height="16"
+							viewBox="0 0 24 24"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="2.4"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+						>
+							<circle cx="12" cy="12" r="9" />
+							<path d="m9 12 2 2 4-4" />
+						</svg>
+					</span>
+					<span>
+						<strong>Tu pago móvil está al día</strong>
+						Teléfono y cédula sincronizados — se reutilizan en envíos sin volver a pedírtelos.
+					</span>
+				</div>
 
-    <div class="info-note">
-      <span class="i" aria-hidden="true">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="m9 12 2 2 4-4"/></svg>
-      </span>
-      <span>
-        <strong>Tu pago móvil está al día</strong>
-        Teléfono y cédula sincronizados — se reutilizan en envíos sin volver a pedírtelos.
-      </span>
-    </div>
+				<div class="pf-card" data-od-id="datos-personales">
+					<div class="card-title">Datos personales</div>
 
-    <div class="pf-card" data-od-id="datos-personales">
-      <div class="card-title">Datos personales</div>
+					<div class="kv-row">
+						<div>
+							<div class="kv-label">Nombres y apellidos</div>
+							<div class="kv-value">Elías Mendoza García</div>
+						</div>
+						<span class="chevron" aria-hidden="true">
+							<svg
+								viewBox="0 0 24 24"
+								fill="none"
+								stroke="currentColor"
+								stroke-width="2"
+								stroke-linecap="round"
+								stroke-linejoin="round"
+							>
+								<path d="M9 6l6 6-6 6" />
+							</svg>
+						</span>
+					</div>
 
-      <div class="kv-row">
-        <div>
-          <div class="kv-label">Nombres y apellidos</div>
-          <div class="kv-value">Elías Mendoza García</div>
-        </div>
-        <span class="chevron" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
-        </span>
-      </div>
+					<div class="kv-row">
+						<div>
+							<div class="kv-label">Cédula</div>
+							<div class="kv-value mono">V-12.345.678</div>
+						</div>
+						<span class="chevron" aria-hidden="true">
+							<svg
+								viewBox="0 0 24 24"
+								fill="none"
+								stroke="currentColor"
+								stroke-width="2"
+								stroke-linecap="round"
+								stroke-linejoin="round"
+							>
+								<path d="M9 6l6 6-6 6" />
+							</svg>
+						</span>
+					</div>
 
-      <div class="kv-row">
-        <div>
-          <div class="kv-label">Cédula</div>
-          <div class="kv-value mono">V-12.345.678</div>
-        </div>
-        <span class="chevron" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
-        </span>
-      </div>
+					<div class="kv-row">
+						<div>
+							<div class="kv-label">Teléfono móvil</div>
+							<div class="kv-value mono">0414-2354587</div>
+						</div>
+						<span class="chevron" aria-hidden="true">
+							<svg
+								viewBox="0 0 24 24"
+								fill="none"
+								stroke="currentColor"
+								stroke-width="2"
+								stroke-linecap="round"
+								stroke-linejoin="round"
+							>
+								<path d="M9 6l6 6-6 6" />
+							</svg>
+						</span>
+					</div>
 
-      <div class="kv-row">
-        <div>
-          <div class="kv-label">Teléfono móvil</div>
-          <div class="kv-value mono">0414-2354587</div>
-        </div>
-        <span class="chevron" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
-        </span>
-      </div>
+					<div class="kv-row" style="border-bottom: 0">
+						<div>
+							<div class="kv-label">Correo electrónico</div>
+							<div class="kv-value">elias.m@correo.com</div>
+						</div>
+						<span class="chevron" aria-hidden="true">
+							<svg
+								viewBox="0 0 24 24"
+								fill="none"
+								stroke="currentColor"
+								stroke-width="2"
+								stroke-linecap="round"
+								stroke-linejoin="round"
+							>
+								<path d="M9 6l6 6-6 6" />
+							</svg>
+						</span>
+					</div>
+				</div>
 
-      <div class="kv-row" style="border-bottom: 0;">
-        <div>
-          <div class="kv-label">Correo electrónico</div>
-          <div class="kv-value">elias.m@correo.com</div>
-        </div>
-        <span class="chevron" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
-        </span>
-      </div>
-    </div>
+				<div class="pf-card links-card" data-od-id="seguridad">
+					<div class="card-title">Seguridad</div>
 
-    <div class="pf-card links-card" data-od-id="seguridad">
-      <div class="card-title">Seguridad</div>
+					<div class="kv-row">
+						<span class="lico"
+							><svg
+								viewBox="0 0 24 24"
+								fill="none"
+								stroke="currentColor"
+								stroke-width="2"
+								stroke-linecap="round"
+								stroke-linejoin="round"
+							>
+								<rect x="4" y="11" width="16" height="10" rx="2" />
+								<path d="M8 11V8a4 4 0 0 1 8 0v3" /></svg
+						></span>
+						<div class="ltxt">
+							Cambiar contraseña
+							<div class="lsub">Última vez · hace 28 días</div>
+						</div>
+						<svg
+							viewBox="0 0 24 24"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="2"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+						>
+							<path d="M9 6l6 6-6 6" />
+						</svg>
+					</div>
 
-      <div class="kv-row">
-        <span class="lico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></span>
-        <div class="ltxt">
-          Cambiar contraseña
-          <div class="lsub">Última vez · hace 28 días</div>
-        </div>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
-      </div>
+					<div class="kv-row">
+						<span class="lico"
+							><svg
+								viewBox="0 0 24 24"
+								fill="none"
+								stroke="currentColor"
+								stroke-width="2"
+								stroke-linecap="round"
+								stroke-linejoin="round"
+							>
+								<path d="M4 8V6a2 2 0 0 1 2-2h2" />
+								<path d="M16 4h2a2 2 0 0 1 2 2v2" />
+								<path d="M20 16v2a2 2 0 0 1-2 2h-2" />
+								<path d="M8 20H6a2 2 0 0 1-2-2v-2" />
+								<circle cx="12" cy="12" r="3" /></svg
+						></span>
+						<div class="ltxt">
+							Face ID & autenticación biométrica
+							<div class="lsub">Activo en este dispositivo</div>
+						</div>
+						<svg
+							viewBox="0 0 24 24"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="2"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+						>
+							<path d="M9 6l6 6-6 6" />
+						</svg>
+					</div>
 
-      <div class="kv-row">
-        <span class="lico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8V6a2 2 0 0 1 2-2h2"/><path d="M16 4h2a2 2 0 0 1 2 2v2"/><path d="M20 16v2a2 2 0 0 1-2 2h-2"/><path d="M8 20H6a2 2 0 0 1-2-2v-2"/><circle cx="12" cy="12" r="3"/></svg></span>
-        <div class="ltxt">
-          Face ID & autenticación biométrica
-          <div class="lsub">Activo en este dispositivo</div>
-        </div>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
-      </div>
+					<div class="kv-row" style="border-bottom: 0">
+						<span class="lico"
+							><svg
+								viewBox="0 0 24 24"
+								fill="none"
+								stroke="currentColor"
+								stroke-width="2"
+								stroke-linecap="round"
+								stroke-linejoin="round"
+							>
+								<rect x="6" y="3" width="12" height="18" rx="2" />
+								<circle cx="12" cy="17" r="1" /></svg
+						></span>
+						<div class="ltxt">
+							Dispositivos activos
+							<div class="lsub">2 dispositivos vinculados</div>
+						</div>
+						<svg
+							viewBox="0 0 24 24"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="2"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+						>
+							<path d="M9 6l6 6-6 6" />
+						</svg>
+					</div>
+				</div>
 
-      <div class="kv-row" style="border-bottom: 0;">
-        <span class="lico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="3" width="12" height="18" rx="2"/><circle cx="12" cy="17" r="1"/></svg></span>
-        <div class="ltxt">
-          Dispositivos activos
-          <div class="lsub">2 dispositivos vinculados</div>
-        </div>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
-      </div>
-    </div>
+				<div class="footer-action">
+					<button>Cerrar sesión</button>
+				</div>
 
-    <div class="footer-action">
-      <button>Cerrar sesión</button>
-    </div>
-
-    <div class="version">Banco Aurora · v3.4.1</div>
-  </section>
-</div>
-</body>
+				<div class="version">Banco Aurora · v3.4.1</div>
+			</section>
+		</div>
+	</body>
 </html>

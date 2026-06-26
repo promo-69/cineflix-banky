@@ -7,11 +7,11 @@ export const load: PageServerLoad = async ({ url }) => {
 	const page = parseInt(url.searchParams.get('page') || '1');
 	const limit = 10;
 	const offset = (page - 1) * limit;
-	
+
 	const options: any = {
 		order: [['id', 'DESC']],
 		limit,
-		offset
+		offset,
 	};
 
 	if (search) {
@@ -21,9 +21,9 @@ export const load: PageServerLoad = async ({ url }) => {
 	const { count, rows: users } = await User.findAndCountAll(options);
 
 	return {
-		users: users.map(u => u.toJSON()),
+		users: users.map((u) => u.toJSON()),
 		total: count,
 		page,
-		totalPages: Math.ceil(count / limit)
+		totalPages: Math.ceil(count / limit),
 	};
 };

@@ -1,158 +1,259 @@
 <!doctype html>
 <html lang="es">
-<head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Pago móvil · Banco Aurora</title>
-<link rel="stylesheet" href="assets/styles.css" />
-<style>
-  .pm-hero {
-    background: var(--brand-core);
-    color: #fff;
-    padding: 4px 20px 28px;
-    border-radius: 0 0 24px 24px;
-  }
-  .pm-hero h2 {
-    font-family: var(--font-display);
-    font-size: 20px;
-    font-weight: 600;
-    margin: 0 0 4px;
-    letter-spacing: -0.01em;
-  }
-  .pm-hero p { font-size: 13px; opacity: 0.78; margin: 0; }
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>Pago móvil · Banco Aurora</title>
+		<link rel="stylesheet" href="assets/styles.css" />
+		<style>
+			.pm-hero {
+				background: var(--brand-core);
+				color: #fff;
+				padding: 4px 20px 28px;
+				border-radius: 0 0 24px 24px;
+			}
+			.pm-hero h2 {
+				font-family: var(--font-display);
+				font-size: 20px;
+				font-weight: 600;
+				margin: 0 0 4px;
+				letter-spacing: -0.01em;
+			}
+			.pm-hero p {
+				font-size: 13px;
+				opacity: 0.78;
+				margin: 0;
+			}
 
-  .dry-row {
-    background: rgba(255,255,255,0.10);
-    border-radius: var(--r-md);
-    padding: 12px 14px;
-    margin-top: 18px;
-    display: flex; align-items: center; gap: 10px;
-    font-size: 12px;
-  }
-  .dry-row .left { flex-shrink: 0; color: var(--brand-accent); }
-  .dry-row .left svg { width: 16px; height: 16px; }
-  .dry-row .meta { flex: 1; min-width: 0; }
-  .dry-row .meta strong { display: block; font-weight: 600; opacity: 1; }
-  .dry-row .meta span { opacity: 0.7; font-family: var(--font-mono); font-size: 11px; }
-  .dry-row a {
-    color: var(--brand-accent);
-    text-decoration: none;
-    font-weight: 600;
-    font-size: 12px;
-    flex-shrink: 0;
-  }
+			.dry-row {
+				background: rgba(255, 255, 255, 0.1);
+				border-radius: var(--r-md);
+				padding: 12px 14px;
+				margin-top: 18px;
+				display: flex;
+				align-items: center;
+				gap: 10px;
+				font-size: 12px;
+			}
+			.dry-row .left {
+				flex-shrink: 0;
+				color: var(--brand-accent);
+			}
+			.dry-row .left svg {
+				width: 16px;
+				height: 16px;
+			}
+			.dry-row .meta {
+				flex: 1;
+				min-width: 0;
+			}
+			.dry-row .meta strong {
+				display: block;
+				font-weight: 600;
+				opacity: 1;
+			}
+			.dry-row .meta span {
+				opacity: 0.7;
+				font-family: var(--font-mono);
+				font-size: 11px;
+			}
+			.dry-row a {
+				color: var(--brand-accent);
+				text-decoration: none;
+				font-weight: 600;
+				font-size: 12px;
+				flex-shrink: 0;
+			}
 
-  .pm-form { padding: 22px 20px 12px; }
+			.pm-form {
+				padding: 22px 20px 12px;
+			}
 
-  .bank-select {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--r-md);
-    padding: 14px;
-    display: flex; align-items: center; gap: 12px;
-    cursor: pointer;
-  }
-  .bank-select .bk {
-    width: 38px; height: 38px;
-    border-radius: 8px;
-    background: #DC241F;
-    color: #fff;
-    display: grid; place-items: center;
-    font-weight: 700;
-    font-size: 12px;
-    flex-shrink: 0;
-    letter-spacing: 0.04em;
-  }
-  .bank-select .body { flex: 1; min-width: 0; }
-  .bank-select .body .l { font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); margin-bottom: 2px; }
-  .bank-select .body .v { font-size: 14px; font-weight: 600; color: var(--fg); }
-  .bank-select .body .s { font-size: 12px; color: var(--muted); font-family: var(--font-mono); }
-  .bank-select .chevron { color: var(--muted-2); }
-  .bank-select .chevron svg { width: 16px; height: 16px; }
+			.bank-select {
+				background: var(--surface);
+				border: 1px solid var(--border);
+				border-radius: var(--r-md);
+				padding: 14px;
+				display: flex;
+				align-items: center;
+				gap: 12px;
+				cursor: pointer;
+			}
+			.bank-select .bk {
+				width: 38px;
+				height: 38px;
+				border-radius: 8px;
+				background: #dc241f;
+				color: #fff;
+				display: grid;
+				place-items: center;
+				font-weight: 700;
+				font-size: 12px;
+				flex-shrink: 0;
+				letter-spacing: 0.04em;
+			}
+			.bank-select .body {
+				flex: 1;
+				min-width: 0;
+			}
+			.bank-select .body .l {
+				font-size: 11px;
+				text-transform: uppercase;
+				letter-spacing: 0.06em;
+				color: var(--muted);
+				margin-bottom: 2px;
+			}
+			.bank-select .body .v {
+				font-size: 14px;
+				font-weight: 600;
+				color: var(--fg);
+			}
+			.bank-select .body .s {
+				font-size: 12px;
+				color: var(--muted);
+				font-family: var(--font-mono);
+			}
+			.bank-select .chevron {
+				color: var(--muted-2);
+			}
+			.bank-select .chevron svg {
+				width: 16px;
+				height: 16px;
+			}
 
-  .phone-row { display: grid; grid-template-columns: 96px 1fr; gap: 8px; }
-  .field.amount input { text-align: center; }
-</style>
-</head>
-<body>
-<div class="app">
-  <header class="appbar" data-od-id="pm-appbar">
-    <a class="back-btn" href="03-dashboard.html" aria-label="Volver">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
-    </a>
-    <h1>Pago móvil</h1>
-  </header>
+			.phone-row {
+				display: grid;
+				grid-template-columns: 96px 1fr;
+				gap: 8px;
+			}
+			.field.amount input {
+				text-align: center;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="app">
+			<header class="appbar" data-od-id="pm-appbar">
+				<a class="back-btn" href="03-dashboard.html" aria-label="Volver">
+					<svg
+						viewBox="0 0 24 24"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="2.2"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+					>
+						<path d="M15 18l-6-6 6-6" />
+					</svg>
+				</a>
+				<h1>Pago móvil</h1>
+			</header>
 
-  <section class="pm-hero" data-od-id="pm-hero">
-    <h2>Envía a un teléfono</h2>
-    <p>Solo necesitas el banco, el teléfono y la cédula del beneficiario.</p>
+			<section class="pm-hero" data-od-id="pm-hero">
+				<h2>Envía a un teléfono</h2>
+				<p>Solo necesitas el banco, el teléfono y la cédula del beneficiario.</p>
 
-    <div class="dry-row" data-od-id="dry-source">
-      <span class="left" aria-hidden="true">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="m9 12 2 2 4-4"/></svg>
-      </span>
-      <div class="meta">
-        <strong>Enviando como Elías Mendoza</strong>
-        <span>V-12.345.678 · 0414-2354587</span>
-      </div>
-      <a href="04-perfil.html">Cambiar</a>
-    </div>
-  </section>
+				<div class="dry-row" data-od-id="dry-source">
+					<span class="left" aria-hidden="true">
+						<svg
+							viewBox="0 0 24 24"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="2"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+						>
+							<circle cx="12" cy="12" r="9" />
+							<path d="m9 12 2 2 4-4" />
+						</svg>
+					</span>
+					<div class="meta">
+						<strong>Enviando como Elías Mendoza</strong>
+						<span>V-12.345.678 · 0414-2354587</span>
+					</div>
+					<a href="04-perfil.html">Cambiar</a>
+				</div>
+			</section>
 
-  <main class="pm-form">
+			<main class="pm-form">
+				<div class="field">
+					<label>Banco destino</label>
+					<div class="bank-select" data-od-id="bank-select">
+						<div class="bk">0134</div>
+						<div class="body">
+							<div class="v">Banesco</div>
+							<div class="s">Código 0134</div>
+						</div>
+						<span class="chevron" aria-hidden="true">
+							<svg
+								viewBox="0 0 24 24"
+								fill="none"
+								stroke="currentColor"
+								stroke-width="2"
+								stroke-linecap="round"
+								stroke-linejoin="round"
+							>
+								<path d="M6 9l6 6 6-6" />
+							</svg>
+						</span>
+					</div>
+				</div>
 
-    <div class="field">
-      <label>Banco destino</label>
-      <div class="bank-select" data-od-id="bank-select">
-        <div class="bk">0134</div>
-        <div class="body">
-          <div class="v">Banesco</div>
-          <div class="s">Código 0134</div>
-        </div>
-        <span class="chevron" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
-        </span>
-      </div>
-    </div>
+				<div class="field">
+					<label for="ben-phone">Teléfono del beneficiario</label>
+					<div class="phone-row">
+						<input
+							class="input"
+							type="text"
+							value="0424"
+							style="font-family: var(--font-mono); text-align: center"
+						/>
+						<input
+							id="ben-phone"
+							class="input"
+							type="tel"
+							value="1234567"
+							style="font-family: var(--font-mono); letter-spacing: 0.06em"
+						/>
+					</div>
+				</div>
 
-    <div class="field">
-      <label for="ben-phone">Teléfono del beneficiario</label>
-      <div class="phone-row">
-        <input class="input" type="text" value="0424" style="font-family: var(--font-mono); text-align: center;" />
-        <input id="ben-phone" class="input" type="tel" value="1234567" style="font-family: var(--font-mono); letter-spacing: 0.06em;" />
-      </div>
-    </div>
+				<div class="field">
+					<label for="ben-id">Cédula del beneficiario</label>
+					<input
+						id="ben-id"
+						class="input"
+						type="text"
+						value="V-18.235.149"
+						style="font-family: var(--font-mono)"
+					/>
+				</div>
 
-    <div class="field">
-      <label for="ben-id">Cédula del beneficiario</label>
-      <input id="ben-id" class="input" type="text" value="V-18.235.149" style="font-family: var(--font-mono);" />
-    </div>
+				<div class="field amount">
+					<label for="pm-amount">Monto a enviar</label>
+					<input id="pm-amount" type="text" value="Bs. 480,00" />
+				</div>
 
-    <div class="field amount">
-      <label for="pm-amount">Monto a enviar</label>
-      <input id="pm-amount" type="text" value="Bs. 480,00" />
-    </div>
+				<div class="card" style="margin-top: 8px; padding: 12px 14px">
+					<div class="row between" style="font-size: 12px">
+						<span class="muted">Comisión</span>
+						<span class="mono">Bs. 0,50</span>
+					</div>
+					<div class="divider" style="margin: 10px 0"></div>
+					<div class="row between" style="font-size: 13px">
+						<span style="font-weight: 600">Total débito</span>
+						<span class="mono" style="font-weight: 600">Bs. 480,50</span>
+					</div>
+				</div>
 
-    <div class="card" style="margin-top: 8px; padding: 12px 14px;">
-      <div class="row between" style="font-size: 12px;">
-        <span class="muted">Comisión</span>
-        <span class="mono">Bs. 0,50</span>
-      </div>
-      <div class="divider" style="margin: 10px 0;"></div>
-      <div class="row between" style="font-size: 13px;">
-        <span style="font-weight: 600;">Total débito</span>
-        <span class="mono" style="font-weight: 600;">Bs. 480,50</span>
-      </div>
-    </div>
+				<p class="small muted center" style="margin: 18px 0 4px">
+					El beneficiario recibirá el dinero en menos de 1 minuto.
+				</p>
+			</main>
 
-    <p class="small muted center" style="margin: 18px 0 4px;">
-      El beneficiario recibirá el dinero en menos de 1 minuto.
-    </p>
-  </main>
-
-  <div class="cta-bar">
-    <a href="07-confirmacion.html" class="btn primary">Enviar pago móvil</a>
-  </div>
-</div>
-</body>
+			<div class="cta-bar">
+				<a href="07-confirmacion.html" class="btn primary">Enviar pago móvil</a>
+			</div>
+		</div>
+	</body>
 </html>

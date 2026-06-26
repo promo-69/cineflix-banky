@@ -617,9 +617,19 @@ select.input {
 	padding: 1rem;
 	width: 100%;
 }
+.card .headline {
+	font-size: 16px;
+	border-bottom: 1px solid var(--border);
+	padding-bottom: 12px;
+	margin-bottom: 20px;
+	margin-top: 0;
+}
 .card.flush {
 	overflow: hidden;
-	padding: 4px 1rem;
+	padding: 16px 1rem 4px 1rem;
+}
+.card.flush .headline {
+	margin-bottom: 12px;
 }
 
 .balance-card {

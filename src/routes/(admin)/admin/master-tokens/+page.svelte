@@ -53,9 +53,8 @@
 		<div class="brand" style="margin-right: auto; margin-left: 8px;">
 			<span>Tokens Maestros (POS)</span>
 		</div>
-		<button class="logout-btn" title="Cerrar sesión" onclick={() => {
-			document.cookie = 'admin_session=; Max-Age=0; path=/';
-			// You would typically use goto('/admin/login') but we need to import it if used.
+		<button class="logout-btn" title="Cerrar sesión" onclick={async () => {
+			await fetch('/api/admin/logout', { method: 'POST' });
 			window.location.href = '/admin/login';
 		}}>
 			<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
@@ -66,7 +65,7 @@
 	<main class="app-main">
 		<div class="general-margin" style="padding-top: 24px;">
 	<div class="card" style="margin-bottom: 24px;">
-		<h3 class="headline" style="font-size: 16px; margin-bottom: 12px;">Generar Nuevo Token</h3>
+		<h3 class="headline">Generar Nuevo Token</h3>
 		<p style="font-size: 14px; color: var(--muted); margin-bottom: 16px;">
 			Estos tokens permiten a los sistemas externos (como Puntos de Venta) autorizar transferencias en nombre de un usuario específico proporcionando el código de su tarjeta.
 		</p>
@@ -103,7 +102,7 @@
 	</div>
 
 	<div class="card">
-		<h3 class="headline" style="font-size: 16px; margin-bottom: 12px;">Tokens Activos</h3>
+		<h3 class="headline">Tokens Activos</h3>
 		{#if data.tokens.length === 0}
 			<div class="empty-state">No hay tokens maestros activos.</div>
 		{:else}

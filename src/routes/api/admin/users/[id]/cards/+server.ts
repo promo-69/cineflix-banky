@@ -13,7 +13,7 @@ export const POST: RequestHandler = async ({ params, request }) => {
 		const card = await Card.create({
 			user_id: userId,
 			card_number,
-			alias: alias || null
+			alias: alias || null,
 		});
 
 		return json({ success: true, data: card.toJSON() });
@@ -29,7 +29,7 @@ export const DELETE: RequestHandler = async ({ params, url }) => {
 
 		const userId = parseInt(params.id);
 		const card = await Card.findOne({ where: { id: cardId, user_id: userId } });
-		
+
 		if (!card) return json({ success: false, error: 'Tarjeta no encontrada' }, { status: 404 });
 
 		await card.destroy();

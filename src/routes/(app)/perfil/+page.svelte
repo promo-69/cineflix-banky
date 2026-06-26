@@ -83,12 +83,8 @@
 </header>
 
 <div class="page-content general-margin">
-	<div class="card flush general-margin" style="padding: 0 16px;" data-od-id="datos-personales">
-		<div
-			style="padding: 14px 0 4px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); font-weight: 600;"
-		>
-			Datos personales
-		</div>
+	<div class="card flush general-margin" data-od-id="datos-personales">
+		<h3 class="headline">Datos personales</h3>
 
 		<div class="kv-row" style="display: block; padding-top: 0;">
 			<div class="kv-label" style="margin-bottom: 4px;">Cédula / Documento</div>
@@ -158,12 +154,8 @@
 		</form>
 	</div>
 
-	<div class="card flush general-margin" style="padding: 0 16px;" data-od-id="mis-tarjetas">
-		<div
-			style="padding: 14px 0 4px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); font-weight: 600;"
-		>
-			Mis Tarjetas de Débito
-		</div>
+	<div class="card flush general-margin" data-od-id="mis-tarjetas">
+		<h3 class="headline">Mis Tarjetas de Débito</h3>
 
 		{#if data.cards && data.cards.length > 0}
 			<div style="margin-bottom: 8px;">
@@ -264,12 +256,8 @@
 		</form>
 	</div>
 
-	<div class="card flush general-margin" style="padding: 0 16px;" data-od-id="desarrolladores">
-		<div
-			style="padding: 14px 0 4px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); font-weight: 600;"
-		>
-			Desarrolladores (API)
-		</div>
+	<div class="card flush general-margin" data-od-id="desarrolladores">
+		<h3 class="headline">Desarrolladores (API)</h3>
 
 		<div class="kv-row" style="display: block;">
 			<div class="kv-label" style="margin-bottom: 8px;">API Key</div>

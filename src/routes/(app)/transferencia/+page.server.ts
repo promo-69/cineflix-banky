@@ -15,7 +15,7 @@ export const load: PageServerLoad = async ({ locals, url }) => {
 	if (!user) throw redirect(303, '/login');
 
 	const balance = Number(user.balance || 0);
-	
+
 	const accounts = await AccountDirectory.getAll({ where: { user_id: user.id }, raw: true });
 	const mobilePayments = await MobilePaymentDirectory.getAll({ where: { user_id: user.id }, raw: true });
 
@@ -69,8 +69,8 @@ export const actions: Actions = {
 					amount,
 					destination: destinationDocument,
 					account: destinationAccount,
-					date: new Date().toISOString()
-				}
+					date: new Date().toISOString(),
+				},
 			};
 		} catch (e: any) {
 			if (e.status === 303) throw e;
@@ -118,8 +118,8 @@ export const actions: Actions = {
 					destination: destinationDocument,
 					phone: destinationPhone,
 					bank: bankCode,
-					date: new Date().toISOString()
-				}
+					date: new Date().toISOString(),
+				},
 			};
 		} catch (e: any) {
 			if (e.status === 303) throw e;

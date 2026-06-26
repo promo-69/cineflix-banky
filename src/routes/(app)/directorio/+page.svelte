@@ -193,7 +193,7 @@
 
 		{#if showForm}
 			<div class="form-card card">
-				<h3 style="margin-top: 0;">{formMode === 'create' ? 'Nuevo Contacto' : 'Editar Contacto'}</h3>
+				<h3 class="headline">{formMode === 'create' ? 'Nuevo Contacto' : 'Editar Contacto'}</h3>
 				<div class="form-row">
 					<div class="field">
 						<label for="alias">Alias</label>

@@ -51,7 +51,7 @@ export const POST: RequestHandler = async ({ request }) => {
 			destinationDocument,
 			destinationAccount,
 			amount,
-			reference
+			reference,
 		);
 
 		// 5. Return success

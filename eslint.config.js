@@ -14,11 +14,11 @@ export default ts.config(
 		languageOptions: {
 			globals: {
 				...globals.browser,
-				...globals.node
-			}
-		}
+				...globals.node,
+			},
+		},
 	},
 	{
-		ignores: ['build/', '.svelte-kit/', 'node_modules/']
-	}
+		ignores: ['build/', '.svelte-kit/', 'node_modules/'],
+	},
 );

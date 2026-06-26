@@ -58,7 +58,12 @@ export const AuthService = {
 
 	async verifyToken(token: string) {
 		try {
-			return jwt.verify(token, JWT_SECRET) as { id: number; document_id: string; role?: string; username?: string };
+			return jwt.verify(token, JWT_SECRET) as {
+				id: number;
+				document_id: string;
+				role?: string;
+				username?: string;
+			};
 		} catch (e) {
 			return null;
 		}

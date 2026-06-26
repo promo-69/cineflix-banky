@@ -200,9 +200,9 @@
 		<div class="brand" style="margin-right: auto; margin-left: 8px;">
 			<span>Detalles de Cuenta</span>
 		</div>
-		<button class="logout-btn" title="Cerrar sesión" onclick={() => {
-			document.cookie = 'admin_session=; Max-Age=0; path=/';
-			goto('/admin/login');
+		<button class="logout-btn" title="Cerrar sesión" onclick={async () => {
+			await fetch('/api/admin/logout', { method: 'POST' });
+			window.location.href = '/admin/login';
 		}}>
 			<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
 			<span>Salir</span>
@@ -228,7 +228,11 @@
 
 			{#if currentTab === 'perfil'}
 				<div class="card" style="margin-bottom: 1rem;">
-					<h3 class="headline" style="font-size: 16px;">Editar Perfil</h3>
+					<h3 class="headline">Editar Perfil</h3>
+					<div style="display: flex; gap: 12px; margin-bottom: 16px;">
+						<div class="field" style="flex: 1; margin-bottom: 0;"><label>Documento de Identidad</label><Input readonly class="mono" value={user.document_id} /></div>
+						<div class="field" style="flex: 1; margin-bottom: 0;"><label>Número de Cuenta</label><Input readonly class="mono" value={user.account_number} /></div>
+					</div>
 					<form onsubmit={updateProfile}>
 						<div class="field"><label>Nombre</label><Input name="first_name" bind:value={firstName} isValid={firstName && !isFirstNameValid ? false : undefined} restrict="alpha" required /></div>
 						<div class="field"><label>Apellido</label><Input name="last_name" bind:value={lastName} isValid={lastName && !isLastNameValid ? false : undefined} restrict="alpha" required /></div>
@@ -242,7 +246,7 @@
 				</div>
 			{:else if currentTab === 'seguridad'}
 				<div class="card" style="margin-bottom: 1rem;">
-					<h3 class="headline" style="font-size: 16px;">Rotación de API Key</h3>
+					<h3 class="headline">Rotación de API Key</h3>
 					<div class="field">
 						<label>API KEY ACTUAL</label>
 						<Input class="mono" readonly value={user.api_key} />
@@ -254,7 +258,7 @@
 				</div>
 
 				<div class="card" style="margin-bottom: 1rem;">
-					<h3 class="headline" style="font-size: 16px;">Cambio de Contraseña</h3>
+					<h3 class="headline">Cambio de Contraseña</h3>
 					<form onsubmit={updatePassword}>
 						<div class="field"><label>Nueva Contraseña</label><Input name="new_password" bind:value={newPassword} type="password" isValid={newPassword && !isPasswordValid ? false : undefined} required /></div>
 						<Button type="button" variant="danger-ghost" disabled={!isPasswordValid} style="border: 1px solid var(--danger);" onclick={() => confirmAction('Forzar Cambio de Clave', '¿Estás seguro de que deseas sobrescribir la contraseña de este usuario?', () => submitPasswordBtn.click())}>Forzar Cambio de Clave</Button>
@@ -263,7 +267,7 @@
 				</div>
 			{:else if currentTab === 'tarjetas'}
 				<div class="card" style="margin-bottom: 1rem;">
-					<h3 class="headline" style="font-size: 16px;">Tarjetas Asignadas</h3>
+					<h3 class="headline">Tarjetas Asignadas</h3>
 					{#each cards as card}
 						<div class="kv-row" style="padding: 8px 0; align-items: center;">
 							<div>
@@ -282,7 +286,7 @@
 					{/each}
 					
 					<div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border);">
-						<h3 class="headline" style="font-size: 14px; margin-bottom: 12px; color: var(--muted);">Añadir Nueva Tarjeta</h3>
+						<h3 class="headline" style="font-size: 14px; margin-bottom: 12px; border-bottom: none; color: var(--muted); padding-bottom: 0;">Añadir Nueva Tarjeta</h3>
 						<form onsubmit={addCard}>
 							<div class="field">
 								<label>Número de Tarjeta</label>
@@ -314,9 +318,8 @@
 					</div>
 
 					<div class="card flush" style="margin-bottom: 1rem;">
-						<div style="padding: 1rem; border-bottom: 1px solid var(--border);">
-							<h3 class="headline" style="font-size: 16px; margin: 0;">Historial de Transacciones</h3>
-						</div>
+						<h3 class="headline">Historial de Transacciones</h3>
+
 						{#each data.transactions as txn}
 							<div class="txn" style="padding: 12px 1rem;">
 								<div class="ico {Number(txn.amount) < 0 ? 'debit' : 'credit'}">
@@ -356,7 +359,7 @@
 					</div>
 				{:else if movimientosTab === 'transacciones'}
 					<div class="card" style="margin-bottom: 1rem;">
-						<h3 class="headline" style="font-size: 16px;">Asignar / Retirar Fondos</h3>
+						<h3 class="headline">Asignar / Retirar Fondos</h3>
 						<form onsubmit={adjustBalance}>
 							<div class="field"><label>Monto (Positivo para abonar, negativo para retirar)</label><Input name="amount" bind:value={adjustAmount} isValid={adjustAmount !== '' && !isAdjustValid ? false : undefined} type="number" step="0.01" required /></div>
 							<Button type="button" variant="primary" disabled={!isAdjustValid} onclick={() => confirmAction('Ajustar Saldo', `¿Confirma el ajuste de saldo de Bs. ${adjustAmount}?`, () => submitAdjustBtn.click())}>Ajustar Saldo</Button>
@@ -365,7 +368,7 @@
 					</div>
 
 					<div class="card" style="margin-bottom: 1rem;">
-						<h3 class="headline" style="font-size: 16px;">Forzar Transacción Externa</h3>
+						<h3 class="headline">Forzar Transacción Externa</h3>
 						<div class="segmented" style="margin-bottom: 20px;">
 							<button class={forceType === 'transfer' ? 'active' : ''} onclick={() => setForceType('transfer')}>Transferencia</button>
 							<button class={forceType === 'mobile_payment' ? 'active' : ''} onclick={() => setForceType('mobile_payment')}>Pago Móvil</button>

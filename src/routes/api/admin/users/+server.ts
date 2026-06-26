@@ -13,16 +13,26 @@ export const GET: RequestHandler = async ({ url }) => {
 						{ first_name: { [Op.like]: `%${search}%` } },
 						{ last_name: { [Op.like]: `%${search}%` } },
 					],
-			  }
+				}
 			: {};
 
-		const users = await User.findAll({
+		const page = Number(url.searchParams.get('page')) || 1;
+		const limit = 10;
+		const offset = (page - 1) * limit;
+
+		const { count, rows: users } = await User.findAndCountAll({
 			where: whereClause,
 			order: [['id', 'DESC']],
-			attributes: { exclude: ['password_hash'] }
+			limit,
+			offset,
+			attributes: { exclude: ['password_hash'] },
 		});
 
-		return json({ success: true, data: users.map((u) => u.toJSON()) });
+		return json({
+			success: true,
+			data: users.map((u) => u.toJSON()),
+			meta: { page, limit, total: count, totalPages: Math.ceil(count / limit) },
+		});
 	} catch (e: any) {
 		return json({ success: false, error: e.message }, { status: 500 });
 	}
