@@ -7,19 +7,23 @@ meta {
 post {
   url: {{baseUrl}}/api/external/transactions
   body: json
-  auth: none
+  auth: bearer
 }
 
-headers {
-  Authorization: Bearer af4c7d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c
+auth:bearer {
+  token: {{emitterToken}}
 }
 
 body:json {
   {
     "type": "transfer",
-    "destinationDocument": "V-87654321",
-    "destinationAccount": "02011239123123123231",
+    "destinationDocument": "{{destinationDocument}}",
+    "destinationAccount": "{{destinationAccount}}",
     "amount": 1.50,
     "reference": "Bruno External Test"
   }
+}
+
+script:post-response {
+  bru.setEnvVar("transactionReference", res.body.data.reference);
 }

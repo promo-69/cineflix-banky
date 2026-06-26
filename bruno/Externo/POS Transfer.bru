@@ -7,19 +7,23 @@ meta {
 post {
   url: {{baseUrl}}/api/v1/pos/transfer
   body: json
-  auth: none
+  auth: bearer
 }
 
-headers {
-  Authorization: Bearer mt_RI7xGuLUb4JWOsDTBx811SqiMAS6qC4z
+auth:bearer {
+  token: {{masterToken}}
 }
 
 body:json {
   {
-    "sourceCard": "BRUNOTEST",
-    "destinationDocument": "V-87654321",
-    "destinationAccount": "02011239123123123231",
+    "sourceCard": "{{cardId}}",
+    "destinationDocument": "{{destinationDocument}}",
+    "destinationAccount": "{{destinationAccount}}",
     "amount": 2.50,
     "reference": "Bruno POS Test"
   }
+}
+
+script:post-response {
+  bru.setEnvVar("transactionReference", res.body.data.reference);
 }

@@ -1,0 +1,19 @@
+meta {
+  name: Consultar Transaccion (quien emite)
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/api/external/transactions/{{transactionReference}}
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{emitterToken}}
+}
+
+vars:pre-request {
+  reference: {{transactionReference}}
+}
