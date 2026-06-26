@@ -6,19 +6,12 @@
 	import ConfirmModal from '$lib/components/ConfirmModal.svelte';
 
 	let { data, form }: { data: PageData; form: ActionData } = $props();
-	let loadingWebhook = $state(false);
-	let rotatingApi = $state(false);
-	let webhookUrl = $state('');
+
 	let loadingProfile = $state(false);
 	let firstName = $state('');
 	let lastName = $state('');
 	let phone = $state('');
 	let email = $state('');
-
-	let addingCard = $state(false);
-	let newCardNumber = $state('');
-	let newCardAlias = $state('');
-	let deletingCardId = $state<number | null>(null);
 
 	let showConfirm = $state(false);
 	let confirmTitle = $state('');
@@ -33,13 +26,8 @@
 	}
 
 	let submitProfileBtn: HTMLButtonElement;
-	let submitAddCardBtn: HTMLButtonElement;
-	let submitDeleteCardBtn: Record<string, HTMLButtonElement> = {};
-	let submitRotateApiBtn: HTMLButtonElement;
-	let submitWebhookBtn: HTMLButtonElement;
 
 	$effect(() => {
-		webhookUrl = data.user?.webhook_url || '';
 		firstName = data.user?.first_name || '';
 		lastName = data.user?.last_name || '';
 		phone = data.user?.phone || '';
@@ -50,9 +38,6 @@
 	let isLastNameValid = $derived(lastName.length >= 2);
 	let isPhoneValid = $derived(/^04(14|24|12|16|26)-?\d{7}$/.test(phone) || /^\d{11}$/.test(phone));
 	let isEmailValid = $derived(/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email));
-	let isWebhookValid = $derived(webhookUrl === '' || /^https?:\/\/.+/.test(webhookUrl));
-	let hasWebhookChanged = $derived(webhookUrl !== (data.user?.webhook_url || ''));
-	let canSubmitWebhook = $derived(hasWebhookChanged && isWebhookValid);
 
 	let hasProfileChanges = $derived(
 		firstName !== (data.user?.first_name || '') ||
@@ -154,194 +139,34 @@
 		</form>
 	</div>
 
-	<div class="card flush general-margin" data-od-id="mis-tarjetas">
-		<h3 class="headline">Mis Tarjetas de Débito</h3>
-
-		{#if data.cards && data.cards.length > 0}
-			<div style="margin-bottom: 8px;">
-				{#each data.cards as card}
-					<div class="kv-row" style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding: 12px 0;">
-						<div>
-							<div class="kv-label" style="margin-bottom: 4px;">{card.alias || 'Tarjeta de Débito'}</div>
-							<div class="kv-value mono" style="font-size: 14px; opacity: 0.8;">
-								**** **** **** {card.card_number.slice(-4)}
-							</div>
-						</div>
-						<form
-							method="POST"
-							action="?/deleteCard"
-							use:enhance={() => {
-								deletingCardId = card.id;
-								return async ({ update }) => {
-									await update();
-									deletingCardId = null;
-								};
-							}}
-						>
-							<input type="hidden" name="card_id" value={card.id} />
-							<Button
-								type="button"
-								variant="secondary"
-								style="padding: 6px 10px; min-width: 0; color: var(--danger);"
-								loading={deletingCardId === card.id}
-								onclick={() => confirmAction('Eliminar Tarjeta', '¿Estás seguro de que deseas desvincular esta tarjeta de débito?', () => submitDeleteCardBtn[card.id].click())}
-							>
-								<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 16px; height: 16px;"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
-							</Button>
-							<button type="submit" bind:this={submitDeleteCardBtn[card.id]} style="display: none;"></button>
-						</form>
-					</div>
-				{/each}
+	<div class="menu-card general-margin">
+		<div class="menu-section-header">OPCIONES</div>
+		
+		<a href="/perfil/tarjetas" class="menu-item">
+			<div class="menu-item-icon">
+				<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
 			</div>
-		{:else}
-			<div class="kv-row" style="padding: 12px 0; font-size: 13px; color: var(--muted);">
-				No tienes tarjetas asociadas.
+			<div class="menu-item-content">
+				<div class="menu-item-title">Mis Tarjetas de Débito</div>
+				<div class="menu-item-subtitle">{data.cards ? data.cards.length : 0} tarjeta(s) vinculada(s)</div>
 			</div>
-		{/if}
-
-		<form
-			method="POST"
-			action="?/addCard"
-			use:enhance={() => {
-				addingCard = true;
-				return async ({ update, result }) => {
-					await update();
-					if (result.type === 'success') {
-						newCardNumber = '';
-						newCardAlias = '';
-					}
-					addingCard = false;
-				};
-			}}
-		>
-			<div class="kv-row" style="display: block; border-bottom: 0; padding-bottom: 8px; padding-top: 16px;">
-				<div class="kv-label" style="margin-bottom: 8px;">Vincular Nueva Tarjeta</div>
-				<Input
-					type="text"
-					name="card_number"
-					class="mono"
-					bind:value={newCardNumber}
-					placeholder="Identificador (letras y números)"
-					restrict="alphanumeric_upper"
-					maxlength={20}
-					isValid={newCardNumber ? newCardNumber.length >= 3 : undefined}
-				/>
+			<div class="menu-item-arrow">
+				<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 16px; height: 16px;"><polyline points="9 18 15 12 9 6"></polyline></svg>
 			</div>
-			
-			<div class="kv-row" style="display: block; border-bottom: 0; padding-bottom: 16px; padding-top: 8px;">
-				<div class="kv-label" style="margin-bottom: 8px;">Alias de Tarjeta (Opcional)</div>
-				<Input
-					type="text"
-					name="alias"
-					bind:value={newCardAlias}
-					placeholder="Ej. Nómina"
-				/>
+		</a>
+		
+		<a href="/perfil/desarrolladores" class="menu-item">
+			<div class="menu-item-icon">
+				<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
 			</div>
-
-			<div
-				style="padding-bottom: 16px; padding-top: 16px; margin-top: 8px; border-top: 1px solid var(--border);"
-			>
-				<Button
-					type="button"
-					variant="secondary"
-					disabled={!newCardNumber || newCardNumber.length < 3}
-					loading={addingCard}
-					style="width: 100%;"
-					onclick={() => confirmAction('Vincular Tarjeta', '¿Estás seguro de que deseas vincular esta nueva tarjeta a tu cuenta?', () => submitAddCardBtn.click())}
-				>
-					Añadir
-				</Button>
-				<button type="submit" bind:this={submitAddCardBtn} style="display: none;" disabled={!newCardNumber || newCardNumber.length < 3}></button>
+			<div class="menu-item-content">
+				<div class="menu-item-title">Desarrolladores (API)</div>
+				<div class="menu-item-subtitle">API Key y Webhook URL</div>
 			</div>
-		</form>
-	</div>
-
-	<div class="card flush general-margin" data-od-id="desarrolladores">
-		<h3 class="headline">Desarrolladores (API)</h3>
-
-		<div class="kv-row" style="display: block;">
-			<div class="kv-label" style="margin-bottom: 8px;">API Key</div>
-			<div style="display: flex; gap: 8px; align-items: center;">
-				<Input
-					type="text"
-					class="mono"
-					readonly
-					value={form?.newApiKey || data.user?.api_key || 'No generada'}
-					style="flex: 1;"
-				/>
-				<form
-					method="POST"
-					action="?/rotateApiKey"
-					use:enhance={() => {
-						rotatingApi = true;
-						return async ({ update }) => {
-							await update();
-							rotatingApi = false;
-						};
-					}}
-					style="flex: 0 0 auto;"
-				>
-					<Button
-						type="button"
-						aria-label="Rotar API Key"
-						variant="secondary"
-						style="padding: 10px; width: auto; min-width: 0;"
-						loading={rotatingApi}
-						onclick={() => confirmAction('Rotar API Key', '¿Estás seguro de que deseas rotar tu API Key? Las integraciones actuales dejarán de funcionar inmediatamente.', () => submitRotateApiBtn.click())}
-					>
-						<svg
-							viewBox="0 0 24 24"
-							fill="none"
-							stroke="currentColor"
-							stroke-width="2"
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							style="width: 16px; height: 16px;"
-							><path d="M2 12A10 10 0 0 0 15 21.54A10 10 0 0 1 15 2.46A10 10 0 0 0 2 12Z" /><path
-								d="M21 12h-6"
-							/><path d="M18 15l3-3-3-3" /></svg
-						>
-					</Button>
-					<button type="submit" bind:this={submitRotateApiBtn} style="display: none;"></button>
-				</form>
+			<div class="menu-item-arrow">
+				<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 16px; height: 16px;"><polyline points="9 18 15 12 9 6"></polyline></svg>
 			</div>
-		</div>
-
-		<div class="kv-row" style="display: block; border-bottom: 0;">
-			<div class="kv-label" style="margin-bottom: 8px;">Webhook URL (Síncrono)</div>
-			<form
-				method="POST"
-				action="?/updateWebhook"
-				use:enhance={() => {
-					loadingWebhook = true;
-					return async ({ update }) => {
-						await update({ reset: false });
-						loadingWebhook = false;
-					};
-				}}
-				style="display: flex; gap: 8px; align-items: center;"
-			>
-				<Input
-					type="url"
-					name="webhook_url"
-					bind:value={webhookUrl}
-					placeholder="https://tu-sistema.com/webhook"
-					style="flex: 1; min-width: 0;"
-					isValid={webhookUrl !== (data.user?.webhook_url || '') ? isWebhookValid : undefined}
-				/>
-				<Button
-					type="button"
-					variant="secondary"
-					disabled={!canSubmitWebhook}
-					style="padding: 10px 14px; width: auto; flex: 0 0 auto;"
-					loading={loadingWebhook}
-					onclick={() => confirmAction('Actualizar Webhook', '¿Estás seguro de que deseas actualizar la URL de tu webhook?', () => submitWebhookBtn.click())}
-				>
-					Guardar
-				</Button>
-				<button type="submit" bind:this={submitWebhookBtn} style="display: none;" disabled={!canSubmitWebhook}></button>
-			</form>
-		</div>
+		</a>
 	</div>
 
 </div>
@@ -356,25 +181,72 @@
 />
 
 <style>
-	.profile-hero {
-		background: var(--brand-core);
-		color: #fff;
-		display: flex;
-		flex-wrap: wrap;
-		justify-content: center;
-		border-radius: 0 0 28px 28px;
-		text-align: center;
-	}
-	.profile-hero .avatar.lg {
+	.menu-card {
 		background: #fff;
-		color: var(--brand-core);
-		box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.18);
+		border-radius: 12px;
+		border: 1px solid var(--border);
+		overflow: hidden;
+		margin-bottom: 24px;
 	}
-	.profile-hero h2 {
-		font-family: var(--font-display);
-		font-size: 19px;
-		width: 100%;
+	.menu-section-header {
+		font-size: 11px;
 		font-weight: 600;
-		letter-spacing: -0.01em;
+		color: var(--muted);
+		text-transform: uppercase;
+		letter-spacing: 0.05em;
+		padding: 16px 16px 8px 16px;
+	}
+	.menu-item {
+		display: flex;
+		align-items: center;
+		padding: 16px;
+		text-decoration: none;
+		color: inherit;
+		border-bottom: 1px solid var(--border);
+		transition: background 0.2s;
+	}
+	.menu-item:last-child {
+		border-bottom: none;
+	}
+	.menu-item:hover {
+		background: var(--bg-secondary, #f9fafb);
+	}
+	.menu-item-icon {
+		width: 40px;
+		height: 40px;
+		border-radius: 50%;
+		background: rgba(var(--brand-core-rgb, 0, 0, 0), 0.06);
+		color: var(--brand-core, #000);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		margin-right: 16px;
+		flex-shrink: 0;
+	}
+	.menu-item-icon svg {
+		width: 20px;
+		height: 20px;
+	}
+	.menu-item-content {
+		flex: 1;
+		min-width: 0;
+	}
+	.menu-item-title {
+		font-size: 15px;
+		font-weight: 500;
+		color: var(--text, #111);
+		margin-bottom: 2px;
+	}
+	.menu-item-subtitle {
+		font-size: 13px;
+		color: var(--muted);
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+	.menu-item-arrow {
+		color: var(--muted);
+		margin-left: 16px;
+		display: flex;
 	}
 </style>
