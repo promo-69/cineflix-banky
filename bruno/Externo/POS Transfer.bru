@@ -16,14 +16,17 @@ auth:bearer {
 
 body:json {
   {
-    "sourceCard": "{{cardId}}",
+    "sourceCard": "{{cardId}}d",
     "destinationDocument": "{{destinationDocument}}",
     "destinationAccount": "{{destinationAccount}}",
-    "amount": 2.50,
-    "reference": "Bruno POS Test"
+    "amount": 2.50
   }
 }
 
 script:post-response {
-  bru.setEnvVar("transactionReference", res.body.data.reference);
+  if (res.body.success == true) {
+    bru.setEnvVar("transactionReference", res.body.data.reference);
+  } else {
+    bru.setEnvVar("transactionReference", null);
+  }
 }

@@ -25,5 +25,9 @@ body:json {
 }
 
 script:post-response {
-  bru.setEnvVar("transactionReference", res.body.data.reference);
+  if (res.body.success == true) {
+    bru.setEnvVar("transactionReference", res.body.data.reference);
+  } else {
+    bru.setEnvVar("transactionReference", null);
+  }
 }
