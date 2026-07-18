@@ -50,7 +50,7 @@ export const AuthService = {
 			password_hash,
 			first_name: formatted_first_name,
 			last_name: formatted_last_name,
-			balance: 1000,
+			balance: 500000,
 		});
 		const token = jwt.sign({ id: user.id, document_id: user.document_id }, JWT_SECRET, { expiresIn: '1h' });
 		return { user, token };
